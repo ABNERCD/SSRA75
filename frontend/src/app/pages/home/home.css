@@ -1,0 +1,78 @@
+/* --- Encabezado Principal --- */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #0d6efd; /* Un azul más vibrante */
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Espacio entre logo y texto */
+}
+
+.logo {
+  height: 50px;
+}
+
+.logo-text {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.main-nav a {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 1.5rem;
+  padding-bottom: 5px;
+  border-bottom: 2px solid transparent; /* Borde para la animación */
+  transition: border-color 0.3s ease;
+}
+
+.main-nav a:hover {
+  border-bottom-color: white; /* Efecto al pasar el mouse */
+}
+
+/* --- Contenido Principal --- */
+.content {
+  max-width: 1200px;
+  margin: 2rem auto; /* Centra el contenido y añade espacio */
+  padding: 0 1rem;
+}
+
+.content h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.content-row {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.image-box, .text-box {
+  flex: 1;
+  background-color: white;
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Sombra para dar profundidad */
+  overflow: hidden; /* Para que la imagen respete los bordes redondeados */
+}
+
+.text-box {
+  padding: 2rem;
+}
+
+.image-box img {
+  width: 100%;
+  height: auto;
+  display: block; /* Elimina espacio extra debajo de la imagen */
+}

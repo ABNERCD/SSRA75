@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+/* src/styles.css */
+
+/* 1. Importamos una tipografía profesional desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* 2. Reseteo básico y estilos para el cuerpo de la página */
+body {
+  margin: 0; /* Quitamos los márgenes por defecto */
+  font-family: 'Roboto', sans-serif; /* Usamos la nueva tipografía */
+  background-color: #f4f7f6; /* Un color de fondo suave, no blanco puro */
+  color: #333; /* Un color de texto más suave que el negro puro */
+}
+
+/* 3. Estilos para los enlaces */
+a {
+  text-decoration: none; /* Quitamos el subrayado de los enlaces */
+  color: #007bff;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

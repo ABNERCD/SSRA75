@@ -9,4 +9,4 @@ urlpatterns = [
     
     # 2. RUTA PRINCIPAL DE TU API: Incluye las rutas definidas en api/urls.py
     path('api/v1/', include('api.urls')), 
-]2
+]
