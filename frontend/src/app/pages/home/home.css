@@ -29,13 +29,33 @@
   font-size: 1rem;
   font-weight: 500;
   margin-left: 1.5rem;
-  padding-bottom: 5px;
-  border-bottom: 2px solid transparent; /* Borde para la animación */
-  transition: border-color 0.3s ease;
+  padding-bottom: 5px; 
+  transition: color 0.3s ease; /* Tu transición de color de texto */
+  border-bottom: 2px solid transparent; /* IMPORTANTE: Desactivar tu borde inferior existente */  
+  position: relative; /* Necesario para posicionar la línea animada (::after) */
+  color: white; /* Asegura que el color de texto base sea blanco */
 }
 
+/* --- Línea Inferior Animada con ::after --- */
+.main-nav a::after {
+  content: ''; /* Contenido vacío necesario para pseudo-elementos */
+  position: absolute;
+  bottom: 0; /* Colocar en la parte inferior del enlace */
+  left: 0; /* Iniciar desde la izquierda */ 
+  background-color: #90e0ef; /* Azul Claro para la línea (¡Cámbialo si quieres!) */
+  height: 2px;
+  width: 0;   /* La línea inicialmente tiene anchura cero */
+  transition: width 0.3s ease; /* Transición para que el crecimiento de la línea sea suave */
+}
+
+/* CAMBIO DE COLOR DEL TEXTO */
 .main-nav a:hover {
-  border-bottom-color: white; /* Efecto al pasar el mouse */
+  color: #90e0ef; /* Color del texto igual al de la línea */
+}
+
+/* --- Animación de la Línea en Hover --- */
+.main-nav a:hover::after {
+  width: 100%; /* La línea crece al 100% de la anchura del enlace */
 }
 
 /* --- Contenido Principal --- */
