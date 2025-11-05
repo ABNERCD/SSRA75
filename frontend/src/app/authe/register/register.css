@@ -62,64 +62,67 @@
   width: 100%; /* La línea crece al 100% de la anchura del enlace */
 }
 
-/* --- Contenido Principal --- */
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 50px;
-  max-width: 1200px;
-  margin: 1rem auto; /* Centra el contenido y añade espacio */
-  padding: 0 1rem;
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 1rem;
 }
 
-.content h2 {
-  text-align: center;
-  font-size: 3rem;
-  white-space: nowrap;
-  margin-bottom: 5rem;
-  color: #2c3e50;
+.register-container h1 {
+    text-align: center;
+    font-size: 3rem;
+    white-space: nowrap;
+    margin-bottom: 5rem;
+    color: #2c3e50;
 }
 
 form {
-  width: 100%;
-  max-width: 400px;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+    margin-bottom:  20px;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #333;
-  font-size: 0.95rem;
+    display: inline-block;
+    margin-bottom: 5px;
+    width: 200px;
+    min-width: 200px;
+    margin-right: 15px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
 }
 
 .form-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
+    width: 55%;
+    flex-grow: 1;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3;
 }
 
 .form-group input:focus {
-  border-color: #0d6efd;
-  outline: none;
+    border-color: #0d6efd;
+    outline: none;
 }
 
 form button[type="submit"] {
-  width: 50%;
+    width: 30%;
   display: block;
   margin: 0 auto;
   padding: 12px;
@@ -135,4 +138,23 @@ form button[type="submit"] {
 
 form button[type="submit"]:hover {
   background-color: #0b5ed7;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.login-link a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }
