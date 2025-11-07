@@ -1,98 +1,101 @@
-/* --- Encabezado Principal --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #f4f7fa;
+  color: #1a1a1a;
+}
+
 .main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #0d6efd; /* Un azul más vibrante */
+  padding: 1rem 5%;
+  background: #0a2d5c;
   color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Espacio entre logo y texto */
+  gap: 12px;
 }
 
-.logo {
-  height: 50px;
-}
+.logo { height: 50px; border-radius: 8px; }
+.logo-text { font-size: 1.5rem; font-weight: 700; }
 
-.logo-text {
-  font-size: 1.75rem;
-  font-weight: 700;
-}
-
-.main-nav a {
+.btn-nav {
   color: white;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-left: 1.5rem;
-  padding-bottom: 5px; 
-  transition: color 0.3s ease; /* Tu transición de color de texto */
-  border-bottom: 2px solid transparent; /* IMPORTANTE: Desactivar tu borde inferior existente */  
-  position: relative; /* Necesario para posicionar la línea animada (::after) */
-  color: white; /* Asegura que el color de texto base sea blanco */
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
-/* --- Línea Inferior Animada con ::after --- */
-.main-nav a::after {
-  content: ''; /* Contenido vacío necesario para pseudo-elementos */
-  position: absolute;
-  bottom: 0; /* Colocar en la parte inferior del enlace */
-  left: 0; /* Iniciar desde la izquierda */ 
-  background-color: #90e0ef; /* Azul Claro para la línea (¡Cámbialo si quieres!) */
-  height: 2px;
-  width: 0;   /* La línea inicialmente tiene anchura cero */
-  transition: width 0.3s ease; /* Transición para que el crecimiento de la línea sea suave */
-}
+.btn-nav:hover { background: #ff6347; }
 
-/* CAMBIO DE COLOR DEL TEXTO */
-.main-nav a:hover {
-  color: #90e0ef; /* Color del texto igual al de la línea */
-}
-
-/* --- Animación de la Línea en Hover --- */
-.main-nav a:hover::after {
-  width: 100%; /* La línea crece al 100% de la anchura del enlace */
-}
-
-/* --- Contenido Principal --- */
-.content {
-  max-width: 1200px;
-  margin: 2rem auto; /* Centra el contenido y añade espacio */
-  padding: 0 1rem;
-}
-
-.content h1 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #2c3e50;
-}
-
-.content-row {
+.hero-section {
   display: flex;
-  gap: 2rem;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 2rem;
+  padding: 4rem 5%;
+  background: linear-gradient(135deg, #0a2d5c, #1e4d8c);
+  color: white;
+  gap: 3rem;
 }
 
-.image-box, .text-box {
-  flex: 1;
-  background-color: white;
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Sombra para dar profundidad */
-  overflow: hidden; /* Para que la imagen respete los bordes redondeados */
+.hero-content { flex: 1; min-width: 300px; }
+.highlight { color: #ff6347; }
+.subtitle { font-size: 1.2rem; margin: 1rem 0; opacity: 0.9; }
+.btn-primary {
+  display: inline-block;
+  background: #ff6347;
+  color: white;
+  padding: 0.8rem 1.8rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: 0.3s;
+}
+.btn-primary:hover { background: #e55a3e; transform: translateY(-2px); }
+
+.hero-image { flex: 1; min-width: 300px; }
+#hero-img { width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+
+.mission-vision { padding: 4rem 5%; }
+.container { max-width: 1200px; margin: 0 auto; }
+.mv-card {
+  display: flex;
+  flex-wrap: wrap;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-.text-box {
-  padding: 2rem;
-}
+.mv-card.reverse { flex-direction: row-reverse; }
 
-.image-box img {
-  width: 100%;
-  height: auto;
-  display: block; /* Elimina espacio extra debajo de la imagen */
+.mv-image, .mv-text { flex: 1; min-width: 300px; }
+.mv-image img { width: 100%; height: 100%; object-fit: cover; }
+.mv-text {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.mv-text h2 {
+  font-size: 1.8rem;
+  color: #0a2d5c;
+  margin-bottom: 1rem;
+}
+.mv-text p { line-height: 1.7; color: #444; }
+
+@media (max-width: 768px) {
+  .hero-section { flex-direction: column; text-align: center; }
+  .mv-card, .mv-card.reverse { flex-direction: column; }
 }

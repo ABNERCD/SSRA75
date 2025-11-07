@@ -1,34 +1,61 @@
+<!-- src/app/pages/home/home.html -->
+
 <header class="main-header">
   <div class="logo-container">
-    <img src="/frontend/src/assets/LogoTaller.jpg" alt="SSRA75" class="logo">
+    <!-- CORRECTO -->
+    <img src="assets/LogoTaller.jpg" alt="Logo Aeronacional SSRA75" class="logo">
     <span class="logo-text">Aeronacional</span>
   </div>
   <nav class="main-nav">
-    <a routerLink="/registro">Registro</a>
-    <a routerLink="/login">Inicio de Sesión</a>
+    <a routerLink="/registro" class="btn-nav">Registro</a>
+    <a routerLink="/login" class="btn-nav">Inicio de Sesión</a>
   </nav>
 </header>
 
-<main class="content">
-  <h1>BIENVENIDO(A) a SSRA75</h1>
-
-  <div class="content-row">
-    <div class="image-box">
-      <img src="https://placehold.co/400x200" alt="Imagen de mecánicos">
-    </div>
-    <div class="text-box">
-      <h2>Misión</h2>
-      <p>Proporcionar formación de excelencia para la próxima generación de técnicos aeronáuticos, garantizando la seguridad y eficiencia en la aviación.</p>
-    </div>
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>BIENVENIDO A <span class="highlight">SSRA75</span></h1>
+    <p class="subtitle">Formación técnica de élite en aviación privada y mantenimiento aeronáutico.</p>
+    <a routerLink="." fragment="mision" class="btn-primary">Conoce más de nosotros</a>
   </div>
-
-  <div class="content-row">
-    <div class="text-box">
-      <h2>Visión</h2>
-      <p>Ser la escuela líder en formación aeronáutica, reconocida por nuestra innovación, tecnología de punta y el alto calibre de nuestros egresados.</p>
-    </div>
-    <div class="image-box">
-      <img src="https://placehold.co/400x200/ff6347/ffffff" alt="Avión despegando">
-    </div>
+  <div class="hero-image">
+    <!-- CORRECTO -->
+    <img src="assets/images/Taller.jpg" id="hero-img" class="img-fluid">
   </div>
-</main>
+</section>
+
+<section class="mission-vision" id="mision">
+  <div class="container">
+
+    <div class="card mv-card">
+      <div class="mv-image">
+        <img src="assets/images/Tecnicos.jpg" class="mv-img img-fluid">
+      </div>
+      <div class="mv-text">
+        <h2>Misión</h2>
+        <p>Formar técnicos aeronáuticos de excelencia con estándares internacionales, priorizando la <strong>seguridad, precisión y pasión por volar</strong>.</p>
+      </div>
+    </div>
+
+    <div class="card mv-card reverse">
+      <div class="mv-text">
+        <h2>Visión</h2>
+        <p>Ser la <strong>escuela líder en Latinoamérica</strong> en formación de pilotos privados y especialistas en mantenimiento.</p>
+      </div>
+      <div class="mv-image">
+        <img src="assets/images/Piloto.jpg" class="mv-img img-fluid">
+      </div>
+    </div>
+
+    <div class="card mv-card">
+      <div class="mv-image">
+        <img src="assets/images/Graduados.jpg" class="mv-img img-fluid">
+      </div>
+      <div class="mv-text">
+        <h2>Nuestros Egresados</h2>
+        <p>Profesionales certificados que hoy operan en aerolíneas, hangares y flotas privadas en todo México y el mundo.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
