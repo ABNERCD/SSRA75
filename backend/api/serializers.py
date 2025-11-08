@@ -2,48 +2,79 @@
 from rest_framework import serializers
 from .models import Rol, TipoUsuario, Usuario, Reporte, EstadisticasReporte
 
-# Serializer para Modelos de Soporte (Roles y Tipos de Usuario)
+# --- Serializers Base (Anidados) ---
+
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
-        fields = '__all__' # Incluye todos los campos (id_rol, nombre)
+        fields = ['id_rol', 'nombre']
 
 class TipoUsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoUsuario
-        fields = '__all__' # Incluye todos los campos (id_tipo, nombre)
+        fields = ['id_tipo', 'nombre']
 
-# Serializer para Usuarios
+# --- Serializer Principal de Usuarios (CORREGIDO PARA AUTENTICACIÓN) ---
+
 class UsuarioSerializer(serializers.ModelSerializer):
-    # Campos de solo lectura para mostrar el nombre del Rol y Tipo
-    nombre_rol = serializers.ReadOnlyField(source='id_rol.nombre')
-    nombre_tipo = serializers.ReadOnlyField(source='id_tipo.nombre')
+    # Usar Serializers anidados para mostrar los datos completos del FK (Mejor que ReadOnlyField)
+    # read_only=True asegura que solo se usen para leer la respuesta.
+    id_rol = RolSerializer(read_only=True) 
+    id_tipo = TipoUsuarioSerializer(read_only=True)
+    
+    # Campo de solo escritura que se mapea a 'password' para el hash
+    # ESTO ES CLAVE para AbstractBaseUser (el nombre debe ser 'password')
+    password = serializers.CharField(write_only=True) 
 
     class Meta:
         model = Usuario
-        # Exponemos campos específicos, incluyendo las claves foráneas (id_rol, id_tipo)
-        # y los campos de solo lectura que acabamos de definir.
-        fields = ('id_usuario', 'nombre', 'correo', 'contrasena', 'id_rol', 'nombre_rol', 'id_tipo', 'nombre_tipo', 'fecha_registro')
-        # Hacemos la contraseña de solo escritura para que no se muestre al consultar
-        extra_kwargs = {'contrasena': {'write_only': True}} 
+        # El campo 'password' reemplaza a 'contrasena' en la lista de fields.
+        fields = ('id_usuario', 'nombre', 'correo', 'password', 'id_rol', 'id_tipo', 'fecha_registro')
+        read_only_fields = ['id_usuario', 'fecha_registro']
+        
+    def create(self, validated_data):
+        # 1. Extraer la contraseña
+        password = validated_data.pop('password', None)
+        
+        # 2. Crear el usuario sin la contraseña (que es None por defecto en AbstractBaseUser)
+        user = Usuario.objects.create(**validated_data)
+        
+        # 3. Aplicar el hashing de la contraseña
+        if password is not None:
+            user.set_password(password) # set_password HASHES la contraseña
+            user.save()
+            
+        return user
 
-# Serializer para Estadísticas de Reporte
+# --- Serializer Específico para el Dashboard (/me/) ---
+
+class UsuarioMeSerializer(serializers.ModelSerializer):
+    # Renombrar los campos de FK a algo más amigable y mostrar sus datos anidados
+    rol = RolSerializer(source='id_rol', read_only=True)
+    tipo = TipoUsuarioSerializer(source='id_tipo', read_only=True)
+    
+    class Meta:
+        model = Usuario
+        # Campos exactos que necesita el frontend: id, nombre, correo, rol, tipo
+        fields = ['id_usuario', 'nombre', 'correo', 'rol', 'tipo']
+        
+# --- Otros Serializers (Se mantienen con ajustes menores) ---
+
 class EstadisticasReporteSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadisticasReporte
-        # Excluímos id_reporte si se usa dentro del ReporteSerializer, o incluímos si es standalone
-        fields = ('id_estadistica', 'cantidad', 'consecuencias', 'severidad', 'fase_ocurrencia', 'otros') 
-        # Si se crea la estadística junto con el reporte, se necesita el ID del reporte
-        # fields = '__all__' 
+        fields = '__all__' # Usar '__all__' es más simple si no hay exclusiones
+        # Si quieres excluir id_reporte para anidarlo en ReporteSerializer:
+        # fields = ('id_estadistica', 'cantidad', 'consecuencias', 'severidad', 'fase_ocurrencia', 'otros') 
 
-# Serializer para Reportes
 class ReporteSerializer(serializers.ModelSerializer):
     # Muestra el nombre del usuario en lugar de solo su ID
     nombre_usuario = serializers.ReadOnlyField(source='id_usuario.nombre')
     
-    # Permite anidar la estadística dentro del reporte (solo lectura por defecto)
+    # Permite anidar la estadística dentro del reporte (OneToOneField usa related_name 'estadisticasreporte' por defecto)
     estadisticas = EstadisticasReporteSerializer(source='estadisticasreporte', read_only=True)
 
     class Meta:
         model = Reporte
         fields = ('id_reporte', 'id_usuario', 'nombre_usuario', 'tipo_reporte', 'descripcion', 'fecha_reporte', 'estadisticas')
+        

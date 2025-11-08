@@ -10,26 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+# core/settings.py
 from pathlib import Path
+from datetime import timedelta # Importar para configurar la expiración del token
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-a#5-sq2%sn=!fwkz$jhwwrbrj2)=60(wo6dn-^q0%wdh9dc6sj'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
+# --- Aplicaciones Adicionales ---
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,14 +29,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # --- Aplicaciones Adicionales ---
-    'rest_framework', # Para crear la API REST
-    'api',            # Tu aplicación 'api'
+    # Terceros
+    'corsheaders',            # Para permitir comunicación con Angular
+    'rest_framework',         # Para crear la API REST
+    'rest_framework_simplejwt', # Para la autenticación JWT
+    # Tus apps
+    'api',                    # Tu aplicación 'api'
 ]
 
+# --- Middleware (Agregando CORS) ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # CORS Headers debe ir antes de CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -72,24 +70,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+# --- Database (PostgreSQL) ---
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', # <--- CAMBIO CLAVE
-        'NAME': 'Taller75',                       # <--- Nombre de tu DB
-        'USER': 'postgres',                       # <--- Tu usuario de PostgreSQL
-        'PASSWORD': 'luisjovany',  # <--- ¡IMPORTANTE! Reemplaza con tu contraseña
-        'HOST': 'localhost',                      # <--- Donde corre PostgreSQL
-        'PORT': '5432',                           # <--- Puerto por defecto de PostgreSQL
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Taller75',
+        'USER': 'postgres',
+        'PASSWORD': 'luisjovany',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+# Password validation... (dejamos por defecto)
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -107,22 +101,53 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
-LANGUAGE_CODE = 'es-mx' # <--- CAMBIO
-TIME_ZONE = 'America/Mexico_City' # <--- CAMBIO (o el más apropiado para ti)
-
+LANGUAGE_CODE = 'es-mx' 
+TIME_ZONE = 'America/Mexico_City' 
 USE_I18N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = 'static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# --- CAMBIOS CLAVE PARA AUTENTICACIÓN Y API ---
+
+# 1. Especificar el modelo de usuario a utilizar
+AUTH_USER_MODEL = 'api.Usuario' # <-- Utiliza tu modelo Usuario
+
+# 2. Configuración CORS (Ajusta el puerto de tu Angular)
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',  # Angular default port
+    'http://127.0.0.1:4200',
+]
+# Si necesitas permitir peticiones desde cualquier origen (solo en desarrollo)
+# CORS_ALLOW_ALL_ORIGINS = True 
+
+# 3. Configuración de Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # Permite la autenticación basada en tokens JWT para todas las vistas que lo usen
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        # Recomendable para asegurar los endpoints por defecto
+        'rest_framework.permissions.IsAuthenticated', 
+    )
+}
+
+# 4. Configuración de JWT Simple
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+
+    # 1. Especifica la ruta completa a tu Serializer personalizado
+    'TOKEN_OBTAIN_SERIALIZER': 'api.serializers_auth.CustomTokenObtainPairSerializer',
+    
+    # 🚨 2. AJUSTE CLAVE PARA RESOLVER 'AttributeError: id' 🚨
+    # Indica a JWT que use tu campo de clave primaria: 'id_usuario'
+    'USER_ID_FIELD': 'id_usuario', 
+}
