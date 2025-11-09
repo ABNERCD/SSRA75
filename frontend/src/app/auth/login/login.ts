@@ -1,69 +1,111 @@
-// frontend/src/app/auth/login/login.ts
-
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router'; // <-- Importa Router
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // <-- Importa HttpClient y HttpClientModule
+import { Router, RouterLink } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
+ selector: 'app-login',
+ standalone: true,
+ imports: [
     FormsModule,
     CommonModule,
     RouterLink,
-    HttpClientModule // Necesario para HttpClient en un componente standalone
-  ],
+   HttpClientModule
+   ],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class LoginComponent implements OnInit {
-  
+export class LoginComponent implements OnInit, OnDestroy {
+
+  @ViewChild('loginForm') loginForm!: NgForm;
+ 
+  // PROPIEDAD para controlar la visibilidad de la contraseña
+  passwordVisible: boolean = false; 
+
   // Datos del formulario vinculados por ngModel
   loginData = {
     email: '',
     password: ''
   };
-  
+
   errorLogin: string = '';
-  
-  // Endpoint de Django para obtener el token JWT
+
   API_LOGIN_URL = 'http://localhost:8000/api/auth/token/'; 
 
-  // Inyectamos los servicios en el constructor
   constructor(private http: HttpClient, private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Limpieza inicial para evitar problemas de caché (bfcache)
+    this.loginData.email = '';
+   this.loginData.password = '';
+ }
 
-  // Función ejecutada al enviar el formulario
+  ngOnDestroy(): void {
+    this.loginData.email = '';
+    this.loginData.password = '';
+  }
+
+// ------------------------------------------------------------------
+// LÓGICA DE NAVEGACIÓN AÑADIDA (RESUELVE EL ERROR TS2339)
+// ------------------------------------------------------------------
+
+  /**
+   * Función llamada por el botón "Registrarse". Navega programáticamente.
+   */
+  goToRegister() {
+    // Limpia el formulario antes de navegar
+    if (this.loginForm) {
+        this.loginForm.resetForm();
+    }
+    this.router.navigate(['/register']); // <--- Redirige a la ruta /registro
+  }
+
+// ------------------------------------------------------------------
+// LÓGICA DE MOSTRAR/OCULTAR CONTRASEÑA
+// ------------------------------------------------------------------
+
+  /**
+   * Cambia el estado de la visibilidad de la contraseña.
+   */
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+ }
+
+  /**
+   * Devuelve el tipo de input ('text' o 'password') basado en el estado.
+   */
+  getPasswordInputType(): string {
+   return this.passwordVisible ? 'text' : 'password';
+  }
+
+// ------------------------------------------------------------------
+// LÓGICA DE AUTENTICACIÓN
+// ------------------------------------------------------------------
+
   onSubmit() {
-    this.errorLogin = ''; // Limpia cualquier error previo
+    this.errorLogin = ''; 
 
-    // 1. Prepara las credenciales (Django JWT espera 'correo' y 'password')
     const credentials = {
-        // Mapeamos el campo del formulario 'email' al campo de Django 'correo'
         correo: this.loginData.email, 
         password: this.loginData.password 
     };
 
-    // 2. Petición HTTP POST a la API de Django
     this.http.post<any>(this.API_LOGIN_URL, credentials).subscribe({
       next: (response) => {
-        // --- ÉXITO DEL LOGIN ---
-        
-        // 3. Almacenar los tokens JWT
+        // ÉXITO DEL LOGIN
         localStorage.setItem('access_token', response.access);
         localStorage.setItem('refresh_token', response.refresh);
         
-        // Opcional: Si el backend devuelve nombre/rol, guárdalos aquí.
+        // Limpieza del formulario
+        this.loginData.email = '';
+        this.loginData.password = ''; 
 
-        // 4. Redirigir al Dashboard
         console.log('Login exitoso. Token obtenido.');
-        this.router.navigate(['/dashboard']); // <-- Redirecciona a la ruta del dashboard
+        this.router.navigate(['/dashboard']); 
       },
       error: (err) => {
-        // --- FALLO DEL LOGIN ---
+        // MANEJO DE ERRORES (400, 401, etc.)
         console.error('Error de autenticación:', err);
         this.errorLogin = 'Correo o contraseña incorrectos. Intente de nuevo.';
       }

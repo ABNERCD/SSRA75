@@ -1,138 +1,207 @@
+/* === Estilos globales === */
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(-45deg, #0a2a4d, #004e92, #0072ff, #00c6ff);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === Header === */
 .main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2.5rem 2rem;
-  background-color: #0d6efd; /* Un azul más vibrante */
-  color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 1rem 0;
+  text-align: center;
+  color: #fff;
+  backdrop-filter: blur(8px);
 }
 
-.logo-container {
-  display: flex;
-  align-items: center;
-  gap: 5rem; /* Espacio entre logo y texto */
+.header-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
-.logo {
-  height: 50px;
-}
-
-.logo-text {
-  font-size: 2rem;
+.header-title span {
+  color: #00d4ff;
   font-weight: 700;
 }
 
-.main-nav {
-  padding-left: 2rem;
-  padding-right: 4rem;
+.logo-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
 }
 
-.main-nav a {
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-left: 1.5rem;
-  padding-bottom: 5px; 
-  transition: color 0.3s ease; /* Tu transición de color de texto */
-  border-bottom: 2px solid transparent; /* IMPORTANTE: Desactivar tu borde inferior existente */  
-  position: relative; /* Necesario para posicionar la línea animada (::after) */
-  color: white; /* Asegura que el color de texto base sea blanco */
-}
-
-/* --- Línea Inferior Animada con ::after --- */
-.main-nav a::after {
-  content: ''; /* Contenido vacío necesario para pseudo-elementos */
-  position: absolute;
-  bottom: 0; /* Colocar en la parte inferior del enlace */
-  left: 0; /* Iniciar desde la izquierda */ 
-  background-color: #90e0ef; /* Azul Claro para la línea (¡Cámbialo si quieres!) */
-  height: 2px;
-  width: 0;   /* La línea inicialmente tiene anchura cero */
-  transition: width 0.3s ease; /* Transición para que el crecimiento de la línea sea suave */
-}
-
-/* CAMBIO DE COLOR DEL TEXTO */
-.main-nav a:hover {
-  color: #90e0ef; /* Color del texto igual al de la línea */
-}
-
-/* --- Animación de la Línea en Hover --- */
-.main-nav a:hover::after {
-  width: 100%; /* La línea crece al 100% de la anchura del enlace */
-}
-
-/* --- Contenido Principal --- */
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 50px;
-  max-width: 1200px;
-  margin: 1rem auto; /* Centra el contenido y añade espacio */
-  padding: 0 1rem;
-}
-
-.content h2 {
-  text-align: center;
-  font-size: 3rem;
-  white-space: nowrap;
-  margin-bottom: 5rem;
-  color: #2c3e50;
-}
-
-form {
-  width: 100%;
-  max-width: 400px;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #333;
-  font-size: 0.95rem;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-  border-color: #0d6efd;
-  outline: none;
-}
-
-form button[type="submit"] {
-  width: 50%;
-  display: block;
-  margin: 0 auto;
-  padding: 12px;
-  background-color: #0d6efd;
-  color: white;
+/* === Botón modo oscuro === */
+.btn-toggle-theme {
+  background: transparent;
   border: none;
-  border-radius: 4px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  color: #00c6ff;
+  font-size: 1.6rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: transform 0.2s ease, color 0.3s ease;
 }
 
-form button[type="submit"]:hover {
-  background-color: #0b5ed7;
+.btn-toggle-theme:hover {
+  transform: rotate(15deg);
+  color: #00eaff;
+}
+
+/* === Main === */
+.main-container {
+  flex: 1;
+  padding: 2rem 1rem;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  max-width: 400px;
+  width: 100%;
+  border-radius: 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.login-title {
+  color: #004e92;
+  font-weight: 700;
+}
+
+/* === Inputs y botones === */
+.form-control {
+  border-radius: 12px;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+  border: 1.5px solid #cfd8dc;
+}
+
+.form-control:focus {
+  border-color: #00c6ff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 198, 255, 0.25);
+}
+
+.input-group-text {
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
+
+.input-group-text:hover {
+  background-color: #f0f9ff;
+}
+
+/* === Botones === */
+.btn-primary {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.4s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #00c6ff, #007bff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 198, 255, 0.3);
+}
+
+.btn-register {
+  background: rgba(0, 0, 0, 0.1);
+  color: #004e92;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.4s ease;
+}
+
+.btn-register:hover {
+  background: rgba(0, 212, 255, 0.2);
+  transform: translateY(-2px);
+  color: #002b5b;
+}
+
+/* === Footer === */
+.main-footer {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font-size: 0.9rem;
+  backdrop-filter: blur(6px);
+}
+
+/* === Responsividad === */
+@media (max-width: 576px) {
+  .header-title {
+    font-size: 1.4rem;
+  }
+
+  .login-card {
+    padding: 2rem 1.2rem;
+  }
+}
+
+/* === MODO OSCURO === */
+.dark-mode {
+  background: linear-gradient(-45deg, #0a0a0a, #051520, #0d1f34, #001826);
+  background-size: 400% 400%;
+}
+
+.dark-mode .main-header,
+.dark-mode .main-footer {
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #e8f9ff;
+}
+
+.dark-mode .login-card {
+  background: rgba(7, 18, 28, 0.95);
+  color: #e8f9ff;
+  box-shadow: 0 0 25px rgba(0, 217, 255, 0.15);
+}
+
+.dark-mode .login-title,
+.dark-mode label {
+  color: #00eaff !important;
+}
+
+.dark-mode .form-control {
+  background-color: #0d1f34;
+  color: #e8f9ff;
+  border-color: #007a9e;
+}
+
+.dark-mode .form-control::placeholder {
+  color: #7f9fb8;
+}
+
+.dark-mode .btn-primary {
+  background: linear-gradient(135deg, #003b75, #00a6d9);
+}
+
+.dark-mode .btn-register {
+  background: rgba(255, 255, 255, 0.06);
+  color: #00d4ff;
+}
+
+.dark-mode .input-group-text {
+  background: #0d1f34;
+  color: #00d4ff;
+}
+
+.dark-mode .btn-toggle-theme {
+  color: #00eaff;
 }
