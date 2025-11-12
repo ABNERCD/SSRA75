@@ -1,8 +1,7 @@
-// frontend/src/app/pages/dashboard/dashboard.ts
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../auth/auth.service'; // <<-- ¡Asegúrate de que la ruta sea correcta!
 
 @Component({
   selector: 'app-dashboard',
@@ -10,50 +9,65 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent implements OnInit {
-  
+ 
   // Variables para mostrar información del usuario
-  nombreUsuario: string = 'Cargando...';
+  // Usamos esta variable en el HTML: {{ nombreUsuario }}
+  nombreUsuario: string = 'Cargando...'; 
   rolUsuario: string = 'Cargando...';
   
   // Endpoint de ejemplo para obtener datos seguros de la API
-  API_USUARIO_INFO = 'http://localhost:8000/api/v1/usuarios/me/'; // Necesitarás crear este endpoint en Django
+  API_USUARIO_INFO = 'http://localhost:8000/api/v1/usuarios/me/'; 
 
-  // Inyectar el Router y HttpClient
-  constructor(private router: Router, private http: HttpClient) { }
+  // Inyectar los servicios necesarios
+  constructor(
+    private router: Router, 
+    private http: HttpClient,
+    private authService: AuthService // <<-- Servicio de Autenticación
+  ) { }
 
   ngOnInit(): void {
-    // Aquí se cargan los datos del usuario después de que el componente se inicializa.
+    // 1. OBTENER EL NOMBRE DEL USUARIO DEL SERVICIO (Lectura rápida de localStorage)
+    const storedName = this.authService.getUserName();
+    if (storedName) {
+        this.nombreUsuario = storedName;
+    } else {
+        this.nombreUsuario = 'Usuario';
+    }
+
+    // 2. Cargar el resto de los datos (Rol, etc.) mediante petición HTTP
     this.cargarDatosUsuario();
   }
 
   cargarDatosUsuario(): void {
-    // NOTA IMPORTANTE: Esta petición FALLARÁ hasta que se implemente el Interceptor
-    // ya que no incluirá el token JWT.
+    // NOTA: Esta petición requiere que el token JWT sea enviado (usando un Interceptor).
     this.http.get<any>(this.API_USUARIO_INFO).subscribe({
       next: (data) => {
-        // Asumiendo que tu API devuelve un objeto con nombre y rol
-        this.nombreUsuario = data.nombre;
-        this.rolUsuario = data.rol.nombre; // Ajusta según la estructura real de tu API
+        // Asumiendo que tu API devuelve un objeto con el rol
+        // Puedes omitir esta línea si solo necesitas el nombre:
+        this.rolUsuario = data.rol?.nombre || 'Rol no definido'; 
+ 
+        // Opcional: Si el nombre retornado aquí es más preciso, actualiza el valor:
+        // this.nombreUsuario = data.nombre || this.nombreUsuario;
       },
       error: (err) => {
         console.error('No se pudieron cargar los datos del usuario:', err);
-        // Si el token es inválido o expiró, forzamos el cierre de sesión
+        // Si el token es inválido, forzamos el cierre de sesión
         if (err.status === 401 || err.status === 403) {
-            this.logout();
+           this.logout();
         }
       }
     });
   }
 
   logout(): void {
-    // 1. Limpiar todos los tokens y datos de sesión del almacenamiento local
+    // Limpia el estado de la sesión en el servicio y en localStorage (currentUser)
+    this.authService.logout(); 
+
+    // Limpia los tokens JWT (access_token, refresh_token)
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    // Si guardaste el nombre o rol directamente:
-    localStorage.removeItem('user_name'); 
-    localStorage.removeItem('user_role'); 
 
-    // 2. Redirigir al usuario a la página de login
+    // Redirigir al usuario a la página de login
     console.log('Sesión cerrada. Redirigiendo a login.');
     this.router.navigate(['/auth/login']);
   }

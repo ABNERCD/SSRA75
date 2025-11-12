@@ -4,7 +4,18 @@
     <span class="logo-text">Aeronacional</span>
   </div>
   <nav class="main-nav">
-    <a routerLink="/register">Registro</a>
-    <a routerLink="/login">Inicio de Sesión</a>
+    <a routerLink="/login" class="btn-nav">Cerrar Sesion</a>
   </nav>
 </header>
+
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>BIENVENIDO(A) <span class="highlight">{{ nombreUsuario }} a SSRA75</span></h1>
+    <p class="subtitle">Formación técnica de élite en aviación privada y mantenimiento aeronáutico.</p>
+    <a routerLink="." fragment="mision" class="btn-primary">Conoce más de nosotros</a>
+    </div>
+    <div class="hero-image">
+      <!-- CORRECTIO -->
+       <img src="assets/images/Taller.jpg" id="hero-img" class="img-fluid">
+    </div>
+</section>
