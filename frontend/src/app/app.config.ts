@@ -2,14 +2,12 @@
 
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-// Asegúrate de que tu versión de Angular soporta withInterceptors. 
-// Es estándar a partir de la v15.2
 import { provideHttpClient, withInterceptors } from '@angular/common/http'; 
 
 import { routes } from './app.routes';
-// 1. Importar la función con el nombre de archivo correcto (con guion)
-// 2. Importar la función exportada: { tokenInterceptorFn }
-import { tokenInterceptorFn } from './auth/token-interceptor'; 
+
+// 🛑 CORRECCIÓN: NO SE USA LA EXTENSIÓN .TS y USAMOS EL NOMBRE DE FUNCIÓN CORRECTO
+import { authTokenInterceptor } from './auth/auth-token-interceptor'; 
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +16,8 @@ export const appConfig: ApplicationConfig = {
     // Configuración del Interceptor
     provideHttpClient(
       withInterceptors([
-        tokenInterceptorFn // <--- Usamos el nombre de la función importada
+        // Usamos el nombre de la función exportada del archivo
+        authTokenInterceptor 
       ])
     ),
   ]

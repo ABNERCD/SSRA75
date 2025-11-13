@@ -4,42 +4,51 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home'; 
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './authe/register/register';
-import { DashboardComponent } from './pages/dashboard/dashboard'; // ¡Asegúrate de importar el Dashboard!
-import { authGuard } from './auth/auth.guard'; // Importa tu guardia funcional
+import { DashboardComponent } from './pages/dashboard/dashboard'; 
+import { authGuard } from './auth/auth.guard'; 
 
 export const routes: Routes = [
-    // RUTA DE LOGIN
+    
+    // 1. RUTA RAÍZ: Redirige al inicio (Home)
+    // Cuando el usuario accede a '/', lo enviamos a '/home' para comenzar.
+    { 
+        path: '', 
+        redirectTo: 'home', 
+        pathMatch: 'full' 
+    }, 
+    
+    // 2. RUTA HOME (INICIO) - PÚBLICA
+    // 🛑 ¡CORRECCIÓN CLAVE! Ya no tiene el 'canActivate: [authGuard]'.
+    { 
+        path: 'home', 
+        component: HomeComponent 
+    },
+    
+    // RUTA DE LOGIN (PÚBLICA)
     { 
         path: 'login', 
         component: LoginComponent 
     },
     
-    // RUTA DE REGISTRO
+    // RUTA DE REGISTRO (PÚBLICA)
     { 
         path: 'register', 
         component: RegisterComponent 
     },
     
     // RUTA DEL DASHBOARD (PROTEGIDA)
+    // El 'authGuard' solo se aplica aquí para asegurar que solo usuarios autenticados pasen.
     { 
         path: 'dashboard', 
         component: DashboardComponent,
         canActivate: [authGuard] 
     },
-
-    // RUTA RAÍZ O INICIO (Si el usuario va a '/', el guarda lo evalúa)
-    { 
-        path: '', 
-        component: HomeComponent,
-        canActivate: [authGuard] // 👈 Aplicamos el guarda aquí
-        // Nota: Dentro del authGuard, debes implementar la lógica para
-        // redirigir a '/dashboard' si hay un token válido.
-    },
     
-    // RUTA COMODÍN (redirige al login por defecto o a donde quieras)
+    // RUTA COMODÍN
+    // Si la URL no coincide con ninguna ruta, redirige a 'login' (o a 'home' si lo prefieres).
     { 
         path: '**', 
-        redirectTo: 'login', // Redirige a la página de login si la URL no existe
+        redirectTo: 'login',
         pathMatch: 'full' 
     }
 ];
