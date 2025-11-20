@@ -18,10 +18,18 @@ body{
   z-index: 100;
 }
 
+/* 🛑 NUEVO: Agrupamiento para Menú y Logo */
+.logo-container-group {
+    display: flex;
+    align-items: center;
+    /* Eliminar cualquier margen que separe este grupo del borde izquierdo */
+}
+
 .logo-container {
   display: flex;
   align-items: center;
   gap: 12px; /* Espacio entre logo y texto */
+  /* Asegura que el logo esté pegado al menú */
 }
 
 .logo { height: 50px; border-radius: 8px; }
@@ -75,7 +83,7 @@ body{
   margin-left: 1.5rem;
   padding-bottom: 5px; 
   transition: color 0.3s ease; /* Tu transición de color de texto */
-  border-bottom: 2px solid transparent; /* IMPORTANTE: Desactivar tu borde inferior existente */  
+  border-bottom: 2px solid transparent; /* IMPORTANTE: Desactivar tu borde inferior existente */
   position: relative; /* Necesario para posicionar la línea animada (::after) */
   color: white; /* Asegura que el color de texto base sea blanco */
 }
@@ -88,7 +96,7 @@ body{
   left: 0; /* Iniciar desde la izquierda */ 
   background-color: #90e0ef; /* Azul Claro para la línea (¡Cámbialo si quieres!) */
   height: 2px;
-  width: 0;   /* La línea inicialmente tiene anchura cero */
+  width: 0; /* La línea inicialmente tiene anchura cero */
   transition: width 0.3s ease; /* Transición para que el crecimiento de la línea sea suave */
 }
 
@@ -100,4 +108,137 @@ body{
 /* --- Animación de la Línea en Hover --- */
 .main-nav a:hover::after {
   width: 100%; /* La línea crece al 100% de la anchura del enlace */
+}
+
+/* --- Estilos del Menú Desplegable --- */
+
+/* --- 1. Contenedor Principal (Pegado al Logo) --- */
+.menu-container {
+    position: relative; 
+    display: flex; 
+    align-items: center;
+    cursor: pointer;
+    z-index: 1001; 
+    /* 🛑 ELIMINAR O REDUCIR margin-right para pegarlo al logo */
+    margin-right: 5px; /* Separación mínima entre el botón y el logo */
+}
+
+/* --- 2. Botón de tres puntos (.toggle-btn) --- */
+.toggle-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Aumentar ligeramente la opacidad para asegurar la visibilidad del botón */
+    background: rgba(255, 255, 255, 0.4); 
+    border: 1px solid rgba(255, 255, 255, 0.6); 
+    color: white; /* 🛑 Asegura que los tres puntos sean blancos */
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    outline: none;
+    padding: 0;
+}
+
+/* --- 3. Menú Desplegable Oculto (.dropdown-menu) --- */
+.dropdown-menu {
+    position: absolute;
+    top: 30px; 
+    left: 0; 
+    width: 60px;
+    transition: width 0.4s ease-out, padding 0.4s ease-out, opacity 0.3s;
+    padding: 10px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    background-color: rgba(255, 255, 255, 0.15); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* 🛑 OCULTAR TEXTO: Inicialmente, el texto no tiene ancho */
+.dropdown-menu span {
+    width: 0;
+    opacity: 0;
+    /* Aplicar transición para el texto */
+    transition: width 0.3s, opacity 0.3s; 
+    transition-delay: 0s; /* No retrasar la ocultación */
+}
+
+/* 🛑 MOSTRAR TEXTO: Cuando el menú se ha expandido (segundo hover) */
+.dropdown-menu:hover span {
+    width: auto;
+    opacity: 1;
+    transition-delay: 0.3s; /* Retrasar un poco para que se vea la expansión del ancho */
+}
+
+/* --- 4. Mostrar el Menú al pasar el ratón (Hover) --- */
+.menu-container:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* --- 4. Expandir el Menú al hacer HOVER sobre el Menú Abierto --- */
+.menu-container:hover .dropdown-menu:hover {
+    /* 🛑 ESTADO FINAL: Ancho para el texto */
+    width: 250px; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra más fuerte al expandir */
+}
+
+/* --- 5. Estilos de la Lista y Opciones --- */
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-list li {
+    padding: 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 15px;
+    text-decoration: none;
+    color: white; 
+    font-size: 0.95rem;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-item i {
+    margin-right: 10px;
+    width: 16px; 
+    color: #90e0ef; 
+}
+
+.menu-item span {
+    font-weight: 500;
+}
+
+/* --- 6. Animación de Hover para las Opciones --- */
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.2); 
+    color: #90e0ef;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* --- 7. Estilo específico para "Remove User" --- */
+.remove-user {
+    color: #ff6347; 
+}
+
+.remove-user i {
+    color: #ff6347; 
+}
+
+.remove-user:hover {
+    background-color: rgba(255, 99, 71, 0.15); 
+    color: #ff6347;
 }

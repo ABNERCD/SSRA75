@@ -1,35 +1,39 @@
+// dashboard.component.ts (VERSION CORREGIDA - STANDALONE)
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../../auth/auth.service'; // <<-- ¡Asegúrate de que la ruta sea correcta!
+import { CommonModule } from '@angular/common'; // <-- ¡1. NUEVA IMPORTACIÓN!
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true, // <-- ¡2. DEBE ESTAR EN TRUE!
+  imports: [CommonModule], // <-- ¡3. AÑADIR CommonModule aquí!
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent implements OnInit {
- 
+
   // Variables para mostrar información del usuario
-  // Usamos esta variable en el HTML: {{ nombreUsuario }}
   nombreUsuario: string = 'Cargando...'; 
-  rolUsuario: string = 'Cargando...';
+  rolUsuario: string = 'Cargando...'; // Esta variable controlará las opciones del menú
   
-  // Endpoint de ejemplo para obtener datos seguros de la API
+  // Endpoint para obtener datos seguros de la API
   API_USUARIO_INFO = 'http://localhost:8000/api/v1/usuarios/me/'; 
 
   // Inyectar los servicios necesarios
   constructor(
     private router: Router, 
     private http: HttpClient,
-    private authService: AuthService // <<-- Servicio de Autenticación
+    private authService: AuthService // Servicio de Autenticación
   ) { }
 
   ngOnInit(): void {
-    // 1. OBTENER EL NOMBRE DEL USUARIO DEL SERVICIO (Lectura rápida de localStorage)
+    // 1. OBTENER EL NOMBRE DEL USUARIO DEL SERVICIO (Carga rápida)
     const storedName = this.authService.getUserName();
     if (storedName) {
-        this.nombreUsuario = storedName;
+      this.nombreUsuario = storedName;
     } else {
         this.nombreUsuario = 'Usuario';
     }
@@ -39,12 +43,13 @@ export class DashboardComponent implements OnInit {
   }
 
   cargarDatosUsuario(): void {
-    // NOTA: Esta petición requiere que el token JWT sea enviado (usando un Interceptor).
+    // NOTA: Esta petición requiere que el token JWT sea enviado (usando el Interceptor).
     this.http.get<any>(this.API_USUARIO_INFO).subscribe({
       next: (data) => {
-        // Asumiendo que tu API devuelve un objeto con el rol
-        // Puedes omitir esta línea si solo necesitas el nombre:
-        this.rolUsuario = data.rol?.nombre || 'Rol no definido'; 
+ 
+        // 🛑 CAMBIO CLAVE: Leer el rol anidado desde 'tipo_usuario'
+        // Asume que el backend devuelve: { tipo_usuario: { nombre: "ADMINISTRADOR" } }
+        this.rolUsuario = data.tipo_usuario?.nombre || 'LECTOR'; 
  
         // Opcional: Si el nombre retornado aquí es más preciso, actualiza el valor:
         // this.nombreUsuario = data.nombre || this.nombreUsuario;
