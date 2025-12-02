@@ -26,8 +26,34 @@ body {
   backdrop-filter: blur(8px);
 }
 
+.btn-home{
+  background: transparent;
+  border: none;
+  color: #00c6ff; 
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-home:hover {
+  color: #00eaff;
+  transform: scale(1.1);
+}
+
+/* === MODIFICACIÓN para MODO OSCURO (DARK MODE) === */
+.dark-mode .btn-home {
+  color: #00eaff;
+}
+
+.dark-mode .btn-home:hover {
+  color: #fff; 
+}
+
 .header-title {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 1px;
 }

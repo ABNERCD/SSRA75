@@ -7,10 +7,13 @@ import { RegisterComponent } from './authe/register/register';
 import { DashboardComponent } from './pages/dashboard/dashboard'; 
 import { authGuard } from './auth/auth.guard'; 
 
+// 1. IMPORTAR EL COMPONENTE DE REPORTE VOLUNTARIO
+import { VoluntaryReportComponent } from './pages/voluntary-report/voluntary-report'; 
+// Asegúrate de que esta ruta de importación sea correcta (ajústala si es necesario).
+
 export const routes: Routes = [
     
     // 1. RUTA RAÍZ: Redirige al inicio (Home)
-    // Cuando el usuario accede a '/', lo enviamos a '/home' para comenzar.
     { 
         path: '', 
         redirectTo: 'home', 
@@ -18,7 +21,6 @@ export const routes: Routes = [
     }, 
     
     // 2. RUTA HOME (INICIO) - PÚBLICA
-    // 🛑 ¡CORRECCIÓN CLAVE! Ya no tiene el 'canActivate: [authGuard]'.
     { 
         path: 'home', 
         component: HomeComponent 
@@ -36,16 +38,25 @@ export const routes: Routes = [
         component: RegisterComponent 
     },
     
+    // ----------------------------------------------------
+    // RUTAS PROTEGIDAS (Requieren inicio de sesión)
+    // ----------------------------------------------------
+    
     // RUTA DEL DASHBOARD (PROTEGIDA)
-    // El 'authGuard' solo se aplica aquí para asegurar que solo usuarios autenticados pasen.
     { 
         path: 'dashboard', 
         component: DashboardComponent,
         canActivate: [authGuard] 
     },
     
+    // 3. NUEVA RUTA: REPORTE VOLUNTARIO (PROTEGIDA)
+    { 
+        path: 'reporte-voluntario', 
+        component: VoluntaryReportComponent,
+        canActivate: [authGuard] // Protege con el mismo guardia que el dashboard
+    },
+
     // RUTA COMODÍN
-    // Si la URL no coincide con ninguna ruta, redirige a 'login' (o a 'home' si lo prefieres).
     { 
         path: '**', 
         redirectTo: 'login',

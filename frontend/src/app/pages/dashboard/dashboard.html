@@ -7,11 +7,16 @@
             <div class="dropdown-menu">
                 <ul class="menu-list">
                   <li *ngIf="rolUsuario && rolUsuario !== 'Cargando...'">
-                    <a href="#" class="menu-item"><i class="fas fa-user-circle"></i><span>Ver Perfil</span></a>
+                    <a href="#" class="menu-item"><i class="fas fa-file-alt"></i><span>Reporte Obligatorio</span></a>
                   </li>
                   <li *ngIf="rolUsuario && rolUsuario !== 'Cargando...'">
-                    <a href="#" class="menu-item"><i class="fas fa-edit"></i><span>Editar Detalles</span></a>
-                  </li>
+    <a (click)="goToReporteVoluntario()" 
+       routerLinkActive="active" 
+       class="menu-item link-voluntario">
+        <i class="fas fa-file-alt"></i>
+        <span>Reporte Voluntario</span>
+    </a>
+</li>
                   <ng-container *ngIf="rolUsuario === 'Administrador'">
                     <li>
                       <a href="#" class="menu-item"><i class="fas fa-bell"></i><span>Enviar Recordatorio</span></a>

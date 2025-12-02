@@ -1,15 +1,15 @@
-// dashboard.component.ts (VERSION CORREGIDA - STANDALONE)
+// dashboard.component.ts (VERSIÓN CORREGIDA - STANDALONE)
 
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'; // <-- YA ESTÁ INYECTADO
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common'; // <-- ¡1. NUEVA IMPORTACIÓN!
+import { CommonModule } from '@angular/common'; 
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true, // <-- ¡2. DEBE ESTAR EN TRUE!
-  imports: [CommonModule], // <-- ¡3. AÑADIR CommonModule aquí!
+  standalone: true, 
+  imports: [CommonModule], 
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -17,63 +17,71 @@ export class DashboardComponent implements OnInit {
 
   // Variables para mostrar información del usuario
   nombreUsuario: string = 'Cargando...'; 
-  rolUsuario: string = 'Cargando...'; // Esta variable controlará las opciones del menú
+  rolUsuario: string = 'Cargando...'; 
   
-  // Endpoint para obtener datos seguros de la API
   API_USUARIO_INFO = 'http://localhost:8000/api/v1/usuarios/me/'; 
 
   // Inyectar los servicios necesarios
   constructor(
-    private router: Router, 
+    private router: Router, // <-- Servicio Router ya inyectado
     private http: HttpClient,
-    private authService: AuthService // Servicio de Autenticación
+    private authService: AuthService 
   ) { }
 
   ngOnInit(): void {
-    // 1. OBTENER EL NOMBRE DEL USUARIO DEL SERVICIO (Carga rápida)
     const storedName = this.authService.getUserName();
     if (storedName) {
       this.nombreUsuario = storedName;
     } else {
-        this.nombreUsuario = 'Usuario';
+      this.nombreUsuario = 'Usuario';
     }
-
-    // 2. Cargar el resto de los datos (Rol, etc.) mediante petición HTTP
     this.cargarDatosUsuario();
   }
 
   cargarDatosUsuario(): void {
-    // NOTA: Esta petición requiere que el token JWT sea enviado (usando el Interceptor).
     this.http.get<any>(this.API_USUARIO_INFO).subscribe({
       next: (data) => {
- 
-        // 🛑 CAMBIO CLAVE: Leer el rol anidado desde 'tipo_usuario'
-        // Asume que el backend devuelve: { tipo_usuario: { nombre: "ADMINISTRADOR" } }
         this.rolUsuario = data.tipo_usuario?.nombre || 'LECTOR'; 
- 
-        // Opcional: Si el nombre retornado aquí es más preciso, actualiza el valor:
-        // this.nombreUsuario = data.nombre || this.nombreUsuario;
       },
       error: (err) => {
         console.error('No se pudieron cargar los datos del usuario:', err);
-        // Si el token es inválido, forzamos el cierre de sesión
         if (err.status === 401 || err.status === 403) {
-           this.logout();
+          this.logout();
         }
       }
     });
   }
 
+  // ==========================================================
+  // 🚨 FUNCIÓN AÑADIDA PARA NAVEGACIÓN PROGRAMÁTICA
+  // ==========================================================
+  goToReporteVoluntario(): void {
+    console.log('Intentando navegación a Reporte Voluntario...');
+    
+    // Usamos el servicio Router para navegar a la ruta definida en app.routes.ts
+    this.router.navigate(['/reporte-voluntario'])
+      .then(success => {
+        if (success) {
+          console.log('Navegación a Reporte Voluntario exitosa.');
+        } else {
+          // Esto puede ocurrir si el guard redirige y el router devuelve 'false'
+          console.log('Navegación bloqueada o redirigida (probablemente por el Guard).');
+        }
+      })
+      .catch(err => {
+        // Captura errores de URL o de la promesa de navegación
+        console.error('Error al intentar navegar al reporte:', err);
+      });
+  }
+  
+  // ==========================================================
+  
   logout(): void {
-    // Limpia el estado de la sesión en el servicio y en localStorage (currentUser)
     this.authService.logout(); 
-
-    // Limpia los tokens JWT (access_token, refresh_token)
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-
-    // Redirigir al usuario a la página de login
     console.log('Sesión cerrada. Redirigiendo a login.');
-    this.router.navigate(['/auth/login']);
+    // Nota: Deberías usar ['/login'] o ['/auth/login'] según tu ruta
+    this.router.navigate(['/login']); 
   }
 }
