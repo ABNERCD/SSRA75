@@ -1,111 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aeronacional | Login</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aeronacional | Login</title>
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-  <!-- Fuente moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Iconos Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
 
-  <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="login.css">
-</head>
+    <link rel="stylesheet" href="login.css" />
+  </head>
 
-<body>
-  <!-- Header -->
-  <header class="main-header d-flex justify-content-between align-items-center px-4"> 
-    <div class="header-nav-left d-flex align-items-center">
-      <a routerLink="/home" class="btn-home me-3" aria-label="Ir a la página de inicio">
-        <i class="bi bi-house-door-fill"></i> 
+  <body>
+    <header class="main-header d-flex justify-content-between align-items-center px-4">
+      <a
+        routerLink="/"
+        style="text-decoration: none; color: #003366; margin-bottom: 10px; display: block"
+      >
+        &larr;
       </a>
-    </div>
-    <div class="header-title-center d-flex align-items-center">
-      <img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="Logo" class="logo-img me-2">
-      <h1 class="header-title">SSRA75 <br><span>AERONACIONAL</span></h1>
-    </div>
-    <div class="header-nav-right d-flex align-items-center">
+
+      <div class="container d-flex align-items-center justify-content-center">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/147/147144.png"
+          alt="Logo"
+          class="logo-img me-2"
+        />
+        <h1 class="header-title">SSRA75 <br /><span>Aeronacional</span></h1>
+      </div>
+
       <button id="darkModeToggle" class="btn-toggle-theme">
         <i class="bi bi-moon-stars"></i>
       </button>
-    </div>
-  </header>
+    </header>
 
-  <!-- Contenido principal -->
-  <main class="main-container d-flex justify-content-center align-items-center">
-    <div class="login-card shadow-lg p-4 rounded-4">
-      <h2 class="login-title mb-4 text-center">Accede a tu cuenta</h2>
-      <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
-        <div class="mb-3 text-start">
-          <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
-          <input 
-            type="email" 
-            class="form-control" 
-            id="email" 
-            placeholder="usuario@aeronacional.com" 
-            required
-            name="email"                    
-            [(ngModel)]="loginData.email"   >
-        </div>
-          
-        <div class="mb-4 text-start position-relative">
-          <label for="password" class="form-label fw-semibold">Contraseña</label>
-          <div class="input-group">
-            <input 
-              [type]="getPasswordInputType()"
-              class="form-control" 
-              id="password" 
-              placeholder="••••••••" 
+    <main class="main-container d-flex justify-content-center align-items-center">
+      <div class="login-card shadow-lg p-4 rounded-4">
+        <h2 class="login-title mb-4 text-center">Accede a tu cuenta</h2>
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
+          <div class="mb-3 text-start">
+            <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="usuario@Aeronacional.com"
               required
-              name="password"
-              [(ngModel)]="loginData.password"  >
-            <button type="button" class="btn btn-outline-secondary border-start-0" (click)="togglePasswordVisibility()">
-              <i class="bi" [class.bi-eye-slash]="!passwordVisible" [class.bi-eye]="passwordVisible"></i>
-            </button>
+              name="email"
+              [(ngModel)]="loginData.email"
+            />
           </div>
+
+          <div class="mb-4 text-start position-relative">
+            <label for="password" class="form-label fw-semibold">Contraseña</label>
+            <div class="input-group">
+              <input
+                [type]="getPasswordInputType()"
+                class="form-control"
+                id="password"
+                placeholder="••••••••"
+                required
+                name="password"
+                [(ngModel)]="loginData.password"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary border-start-0"
+                (click)="togglePasswordVisibility()"
+              >
+                <i
+                  class="bi"
+                  [class.bi-eye-slash]="!passwordVisible"
+                  [class.bi-eye]="passwordVisible"
+                ></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Entrar</button>
+          <button
+            type="button"
+            class="btn btn-outline-light w-100 py-2 border-0 btn-register"
+            (click)="goToRegister()"
+          >
+            Registrarse
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="main-footer text-center py-4">
+      <div class="container">
+        <div class="mb-2">
+          <a href="#" class="text-muted text-decoration-none mx-2">Política de Privacidad</a>
+          <span class="text-muted">|</span>
+          <a href="#" class="text-muted text-decoration-none mx-2">Términos y Condiciones</a>
         </div>
-        <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Entrar</button>
-        <button type="button" class="btn btn-outline-light w-100 py-2 border-0 btn-register" (click)="goToRegister()">Registrarse</button>
-      </form>
-    </div>
-  </main>
+        <p class="text-muted small mb-0">
+          &copy; 2025 Aeronacional SSRA75. Todos los derechos reservados.
+        </p>
+      </div>
+    </footer>
 
-  <!-- Footer -->
-  <footer class="main-footer text-center py-3">
-    © 2025 Aeronacional. Todos los derechos reservados.
-  </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // === Modo Oscuro === //
+      const toggleBtn = document.getElementById('darkModeToggle');
+      const body = document.body;
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    
-
-    // === Modo Oscuro === //
-    const toggleBtn = document.getElementById("darkModeToggle");
-    const body = document.body;
-
-    if (localStorage.getItem("theme") === "dark") {
-      body.classList.add("dark-mode");
-      toggleBtn.innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
-    }
-
-    toggleBtn.addEventListener("click", () => {
-      body.classList.toggle("dark-mode");
-
-      if (body.classList.contains("dark-mode")) {
+      if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark-mode');
         toggleBtn.innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
-        localStorage.setItem("theme", "dark");
-      } else {
-        toggleBtn.innerHTML = '<i class="bi bi-moon-stars"></i>';
-        localStorage.setItem("theme", "light");
       }
-    });
-  </script>
-</body>
+
+      toggleBtn.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+
+        if (body.classList.contains('dark-mode')) {
+          toggleBtn.innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
+          localStorage.setItem('theme', 'dark');
+        } else {
+          toggleBtn.innerHTML = '<i class="bi bi-moon-stars"></i>';
+          localStorage.setItem('theme', 'light');
+        }
+      });
+    </script>
+  </body>
 </html>

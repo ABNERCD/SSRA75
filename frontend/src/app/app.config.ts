@@ -1,24 +1,23 @@
-// frontend/src/app/app.config.ts
-
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http'; 
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http'; // Importamos withInterceptors
 
 import { routes } from './app.routes';
 
-// 🛑 CORRECCIÓN: NO SE USA LA EXTENSIÓN .TS y USAMOS EL NOMBRE DE FUNCIÓN CORRECTO
+// Importamos el interceptor funcional (asegúrate de que la ruta sea correcta)
+// NOTA: No uses la extensión .ts en la ruta de importación
 import { authTokenInterceptor } from './auth/auth-token-interceptor'; 
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     
-    // Configuración del Interceptor
+    // Configuración del Cliente HTTP con el Interceptor
     provideHttpClient(
+      withFetch(), // Habilita fetch API (bueno para SSR y rendimiento)
       withInterceptors([
-        // Usamos el nombre de la función exportada del archivo
-        authTokenInterceptor 
+        authTokenInterceptor // Registramos el interceptor aquí
       ])
-    ),
+    )
   ]
 };

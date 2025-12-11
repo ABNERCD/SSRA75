@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router'; 
 import { HttpClient, HttpClientModule } from '@angular/common/http'; 
 
-// Importaciones cruciales para Formularios Reactivos (soluciona NG8002)
+// Importaciones cruciales para Formularios Reactivos
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms'; 
 
 // -----------------------------------------------------------------------
@@ -14,8 +14,8 @@ export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): V
   const password = control.get('contrasena');
   const confirmPassword = control.get('confirmarContrasena');
 
-  // Si los controles no existen o los valores son nulos, no validamos
-  if (!password || !confirmPassword || password.value === null || confirmPassword.value === null) {
+  // Si los controles no existen o los valores son nulos, no validamos aún
+  if (!password || !confirmPassword || !password.value || !confirmPassword.value) {
     return null;
   }
   
@@ -33,17 +33,17 @@ export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): V
     CommonModule,
     RouterLink,
     HttpClientModule,
-    ReactiveFormsModule // <-- ¡Esta importación elimina el error NG8002!
+    ReactiveFormsModule // <-- ¡Crucial para que funcionen los formularios!
   ],
   templateUrl: './register.html', 
   styleUrls: ['./register.css']
 })
 export class RegisterComponent implements OnInit {
     
-  // La propiedad principal del formulario reactivo, vinculada en el HTML con [formGroup]="registroForm"
+  // La propiedad principal del formulario reactivo
   registroForm!: FormGroup; 
 
-  // Propiedades de estado para la plantilla (uso en *ngIf y [disabled])
+  // Propiedades de estado para la plantilla
   errorMessage: string = '';
   successMessage: string = '';
   isLoading: boolean = false;
@@ -63,7 +63,6 @@ export class RegisterComponent implements OnInit {
       contrasena: ['', [Validators.required, Validators.minLength(6)]],
       confirmarContrasena: ['', Validators.required],
       id_tipo: ['', Validators.required],
-      // Puedes añadir aquí otros campos que necesites (ej: matricula, edad, carrera)
     }, { validators: passwordMatchValidator }); // Aplica la validación de coincidencia
   }
 
@@ -71,28 +70,53 @@ export class RegisterComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
     
-    // Si la validación de Angular detecta errores
+    // 1. Si la validación de Angular detecta errores locales
     if (this.registroForm.invalid) {
       this.errorMessage = 'Por favor, completa todos los campos correctamente.';
-      this.registroForm.markAllAsTouched(); // Muestra todos los errores en el HTML
+      this.registroForm.markAllAsTouched(); // Muestra todos los errores en el HTML (bordes rojos)
       return;
     }
     
     this.isLoading = true;
 
-    // Obtener los datos válidos del formulario
-    const data = this.registroForm.value;
-    console.log('Datos de registro listos para enviar:', data);
+    // 2. Preparar los datos para el Backend
+    // Django espera 'password' en lugar de 'contrasena'
+    // Django espera 'id_tipo' como número entero
+    const formData = {
+        nombre: this.registroForm.value.nombre,
+        correo: this.registroForm.value.correo,
+        password: this.registroForm.value.contrasena,
+        id_tipo: parseInt(this.registroForm.value.id_tipo) // Convertir a número
+    };
+
+    console.log('Enviando datos al backend:', formData);
     
-    // --- LÓGICA DE REGISTRO HTTP (POST a Django) AQUÍ ---
-    
-    // SIMULACIÓN DE LLAMADA HTTP
-    setTimeout(() => {
-      this.isLoading = false;
-      this.successMessage = '¡Registro exitoso! Redirigiendo a Iniciar Sesión.';
-      
-      this.registroForm.reset(); 
-      this.router.navigate(['/login']); 
-    }, 1500);
+    // 3. Petición HTTP POST al Backend (Django)
+    this.http.post('http://127.0.0.1:8000/api/v1/registro/', formData).subscribe({
+        next: (response) => {
+            // ÉXITO
+            this.isLoading = false;
+            this.successMessage = '¡Registro exitoso! Redirigiendo a Iniciar Sesión...';
+            
+            // Esperamos 2 segundos para que el usuario lea el mensaje y redirigimos
+            setTimeout(() => {
+                this.router.navigate(['/login']); 
+            }, 2000);
+        },
+        error: (error) => {
+            // ERROR
+            this.isLoading = false;
+            console.error('Error en el registro:', error);
+
+            // Manejo de errores específicos del backend
+            if (error.error && error.error.correo) {
+                this.errorMessage = 'Este correo electrónico ya está registrado.';
+            } else if (error.error && error.error.detail) {
+                this.errorMessage = error.error.detail;
+            } else {
+                this.errorMessage = 'Ocurrió un error al registrar. Verifica tu conexión o intenta más tarde.';
+            }
+        }
+    });
   }
 }
