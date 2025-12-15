@@ -1,87 +1,77 @@
-// dashboard.component.ts (VERSIÓN CORREGIDA - STANDALONE)
-
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'; // <-- YA ESTÁ INYECTADO
-import { HttpClient } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; 
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true, 
-  imports: [CommonModule], 
+  imports: [CommonModule, RouterModule, HttpClientModule], 
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent implements OnInit {
 
-  // Variables para mostrar información del usuario
-  nombreUsuario: string = 'Cargando...'; 
-  rolUsuario: string = 'Cargando...'; 
-  
+  nombreUsuario: string = 'Usuario'; 
+  rolUsuario: string = 'Invitado'; 
+  menuAbierto: boolean = false; 
+  fechaActual: Date = new Date();
+
   API_USUARIO_INFO = 'http://localhost:8000/api/v1/usuarios/me/'; 
 
-  // Inyectar los servicios necesarios
   constructor(
-    private router: Router, // <-- Servicio Router ya inyectado
+    private router: Router,
     private http: HttpClient,
     private authService: AuthService 
   ) { }
 
   ngOnInit(): void {
     const storedName = this.authService.getUserName();
-    if (storedName) {
-      this.nombreUsuario = storedName;
-    } else {
-      this.nombreUsuario = 'Usuario';
-    }
+    if(storedName) this.nombreUsuario = storedName;
     this.cargarDatosUsuario();
   }
 
+  toggleMenu(): void { this.menuAbierto = !this.menuAbierto; }
+  cerrarMenu(): void { this.menuAbierto = false; }
+
   cargarDatosUsuario(): void {
-    this.http.get<any>(this.API_USUARIO_INFO).subscribe({
+    const token = localStorage.getItem('access_token');
+    if (!token) { this.logout(); return; }
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+
+    this.http.get<any>(this.API_USUARIO_INFO, { headers: headers }).subscribe({
       next: (data) => {
-        this.rolUsuario = data.tipo_usuario?.nombre || 'LECTOR'; 
+        this.rolUsuario = data.tipo_usuario?.nombre || 'Miembro';
+        if (data.nombre) this.nombreUsuario = data.nombre;
       },
       error: (err) => {
-        console.error('No se pudieron cargar los datos del usuario:', err);
-        if (err.status === 401 || err.status === 403) {
-          this.logout();
-        }
+        if (err.status === 401 || err.status === 403) this.logout();
       }
     });
   }
 
-  // ==========================================================
-  // 🚨 FUNCIÓN AÑADIDA PARA NAVEGACIÓN PROGRAMÁTICA
-  // ==========================================================
   goToReporteVoluntario(): void {
-    console.log('Intentando navegación a Reporte Voluntario...');
-    
-    // Usamos el servicio Router para navegar a la ruta definida en app.routes.ts
-    this.router.navigate(['/reporte-voluntario'])
-      .then(success => {
-        if (success) {
-          console.log('Navegación a Reporte Voluntario exitosa.');
-        } else {
-          // Esto puede ocurrir si el guard redirige y el router devuelve 'false'
-          console.log('Navegación bloqueada o redirigida (probablemente por el Guard).');
-        }
-      })
-      .catch(err => {
-        // Captura errores de URL o de la promesa de navegación
-        console.error('Error al intentar navegar al reporte:', err);
-      });
+    this.cerrarMenu();
+    this.router.navigate(['/reporte-voluntario']);
   }
-  
-  // ==========================================================
-  
+
+  goToReport(tipo: string): void {
+    this.cerrarMenu();
+    console.log(`Navegando a reporte: ${tipo}`);
+    switch(tipo) {
+      case 'rpas-avistamiento': break;
+      case 'rpas-danos': break;
+      case 'incapacitacion-operador': break;
+      case 'incapacitacion-tecnico': break;
+      case 'grf': break;
+    }
+  }
+
   logout(): void {
     this.authService.logout(); 
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    console.log('Sesión cerrada. Redirigiendo a login.');
-    // Nota: Deberías usar ['/login'] o ['/auth/login'] según tu ruta
     this.router.navigate(['/login']); 
   }
 }

@@ -44,6 +44,41 @@ body {
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
 }
 
+/* === NUEVO: Botón Regresar a Inicio (Estilo Cápsula) === */
+.btn-back-home {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre flecha y texto */
+  padding: 8px 20px;
+  
+  /* Estilo base glassmorphism */
+  background: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  border-radius: 50px; 
+  
+  /* Texto */
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  
+  /* Animaciones */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-back-home:hover {
+  background: rgba(0, 198, 255, 0.2); 
+  border-color: #00c6ff; 
+  color: #00eaff; 
+  transform: translateX(-5px); /* Se mueve a la izquierda */
+  box-shadow: 0 0 15px rgba(0, 198, 255, 0.4); 
+}
+
+.btn-back-home i {
+  font-size: 1.2rem; /* Tamaño del icono */
+}
+
 /* === Botón modo oscuro === */
 .btn-toggle-theme {
   background: transparent;
@@ -136,12 +171,35 @@ body {
   color: #002b5b;
 }
 
-/* === Footer === */
+/* === Footer Mejorado === */
 .main-footer {
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.5); 
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
   font-size: 0.9rem;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
+  margin-top: auto; 
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #00c6ff; 
+  text-shadow: 0 0 8px rgba(0, 198, 255, 0.4);
+}
+
+.footer-separator {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.footer-text {
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.5rem;
 }
 
 /* === Responsividad === */
@@ -161,10 +219,15 @@ body {
   background-size: 400% 400%;
 }
 
-.dark-mode .main-header,
-.dark-mode .main-footer {
+.dark-mode .main-header {
   background-color: rgba(0, 0, 0, 0.4);
   color: #e8f9ff;
+}
+
+/* Override para Footer en Dark Mode */
+.dark-mode .main-footer {
+  background-color: rgba(0, 0, 0, 0.7); 
+  border-top: 1px solid rgba(0, 212, 255, 0.1);
 }
 
 .dark-mode .login-card {
@@ -204,4 +267,16 @@ body {
 
 .dark-mode .btn-toggle-theme {
   color: #00eaff;
+}
+
+/* Override para botón Volver en Dark Mode */
+.dark-mode .btn-back-home {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 212, 255, 0.2);
+}
+
+.dark-mode .btn-back-home:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: #00eaff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
 }

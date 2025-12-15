@@ -9,39 +9,34 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
-
     <link rel="stylesheet" href="login.css" />
   </head>
 
   <body>
     <header class="main-header d-flex justify-content-between align-items-center px-4">
-      <a
-        routerLink="/"
-        style="text-decoration: none; color: #003366; margin-bottom: 10px; display: block"
-      >
-        &larr;
+      <a routerLink="/" class="btn-back-home">
+        <i class="bi bi-arrow-left-circle-fill"></i>
+        <span>Volver</span>
       </a>
 
       <div class="container d-flex align-items-center justify-content-center">
         <img
           src="https://cdn-icons-png.flaticon.com/512/147/147144.png"
-          alt="Logo"
+          alt="Logo Aeronacional"
           class="logo-img me-2"
         />
         <h1 class="header-title">SSRA75 <br /><span>Aeronacional</span></h1>
       </div>
 
-      <button id="darkModeToggle" class="btn-toggle-theme">
+      <button id="darkModeToggle" class="btn-toggle-theme" aria-label="Cambiar tema">
         <i class="bi bi-moon-stars"></i>
       </button>
     </header>
@@ -49,6 +44,7 @@
     <main class="main-container d-flex justify-content-center align-items-center">
       <div class="login-card shadow-lg p-4 rounded-4">
         <h2 class="login-title mb-4 text-center">Accede a tu cuenta</h2>
+
         <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
           <div class="mb-3 text-start">
             <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
@@ -56,10 +52,11 @@
               type="email"
               class="form-control"
               id="email"
-              placeholder="usuario@Aeronacional.com"
+              placeholder="usuario@aeronacional.com"
               required
               name="email"
               [(ngModel)]="loginData.email"
+              autocomplete="email"
             />
           </div>
 
@@ -74,11 +71,13 @@
                 required
                 name="password"
                 [(ngModel)]="loginData.password"
+                autocomplete="current-password"
               />
               <button
                 type="button"
                 class="btn btn-outline-secondary border-start-0"
                 (click)="togglePasswordVisibility()"
+                aria-label="Mostrar u ocultar contraseña"
               >
                 <i
                   class="bi"
@@ -88,7 +87,18 @@
               </button>
             </div>
           </div>
+
+          <div
+            *ngIf="errorLogin"
+            class="alert alert-danger d-flex align-items-center p-2 mb-3 fade show"
+            role="alert"
+          >
+            <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
+            <div class="small">{{ errorLogin }}</div>
+          </div>
+
           <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Entrar</button>
+
           <button
             type="button"
             class="btn btn-outline-light w-100 py-2 border-0 btn-register"
@@ -103,22 +113,23 @@
     <footer class="main-footer text-center py-4">
       <div class="container">
         <div class="mb-2">
-          <a href="#" class="text-muted text-decoration-none mx-2">Política de Privacidad</a>
-          <span class="text-muted">|</span>
-          <a href="#" class="text-muted text-decoration-none mx-2">Términos y Condiciones</a>
+          <a href="#" class="footer-link mx-2">Política de Privacidad</a>
+          <span class="footer-separator">|</span>
+          <a href="#" class="footer-link mx-2">Términos y Condiciones</a>
         </div>
-        <p class="text-muted small mb-0">
+        <p class="footer-text small mb-0">
           &copy; 2025 Aeronacional SSRA75. Todos los derechos reservados.
         </p>
       </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-      // === Modo Oscuro === //
       const toggleBtn = document.getElementById('darkModeToggle');
       const body = document.body;
 
+      // Cargar preferencia guardada
       if (localStorage.getItem('theme') === 'dark') {
         body.classList.add('dark-mode');
         toggleBtn.innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
