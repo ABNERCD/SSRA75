@@ -10,8 +10,8 @@
         <img src="assets/images/LogoTaller.jpg" alt="Logo de la Empresa" class="logo-img"> 
         <h1>REPORTE VOLUNTARIO</h1>
         <div class="report-meta">
-            <label>Reporte No. ______ / ______</label>
             <label>Fecha: ____________________</label>
+            <label>Reporte No. ______ / ______</label>
         </div>
     </div>
     
@@ -88,6 +88,62 @@
                 </div>
             </div>
         </fieldset>
+
+        <fieldset class="section analysis-section">
+            <legend>Análisis y Evaluación del Riesgo (Taller 75)</legend>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="similarFailures">¿Qué equipo o componente del mismo tipo pueden tener fallas similares?</label>
+                    <input type="text" id="similarFailures" formControlName="similarFailures" placeholder="n/a">
+                </div>
+                <div class="form-group">
+                    <label>¿Existen antecedentes de sucesos similares?</label>
+                    <div class="radio-group-inline">
+                        <label><input type="radio" formControlName="hasAntecedents" value="si"> Sí </label>
+                        <label><input type="radio" formControlName="hasAntecedents" value="no"> No</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="staffCount">¿Cuántos miembros de mantenimiento siguen estos procedimientos?</label>
+                    <input type="number" id="staffCount" formControlName="staffCount">
+                </div>
+                <div class="form-group">
+                    <label for="usagePercentage">¿Porcentaje de tiempo que se usa el equipo/procedimiento?</label>
+                    <input type="text" id="usagePercentage" formControlName="usagePercentage" placeholder="ej. n/a">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>¿Existe la probabilidad de que el peligro sea una amenaza para los pasajeros?</label>
+                <div class="radio-group-inline">
+                    <label><input type="radio" formControlName="passengerThreat" value="si"> Sí</label>
+                    <label><input type="radio" formControlName="passengerThreat" value="no"> No</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="livesAtRisk">¿Cuántas vidas podrían peligrar? (Empleados, pasajeros, público):</label>
+                <input type="text" id="livesAtRisk" formControlName="livesAtRisk">
+            </div>
+        </fieldset>
+        
+        <fieldset class="section mitigation-strategies">
+            <legend>Estrategias Específicas de Mitigación (Página 3)</legend>
+            <p class="instruction-text">Seleccione las estrategias aplicables para mitigar el riesgo:</p>
+    
+            <div class="checkbox-group-right">
+                <label>Revisar el diseño del sistema <input type="checkbox" formControlName="mitigationReviewDesign"></label>
+                <label>Modificación de los procedimientos operacionales <input type="checkbox" formControlName="mitigationModOpProcedures"></label>
+                <label>Cambios en la manera como se organiza el personal <input type="checkbox" formControlName="mitigationOrgChanges"></label>
+                <label>Entrenamiento del personal para enfrentar el peligro <input type="checkbox" formControlName="mitigationStaffTraining"></label>
+                <label>Desarrollo de medidas y planes de emergencia y contingencia <input type="checkbox" formControlName="mitigationEmergencyPlans"></label>
+                <label>Cese de las operaciones <input type="checkbox" formControlName="mitigationCessation"></label>
+            </div>
+        </fieldset>
         
         <fieldset class="section risk-management-section">
             <legend>Gestión del riesgo</legend> 
@@ -127,6 +183,29 @@
                 </div>
             </div>
         </fieldset>
+
+        <fieldset class="section evidence-section">
+            <legend>Evidencia Fotográfica</legend>
+            <p class="info-text">
+                Suba imágenes que ayuden a detallar el peligro identificado (ej. daños en componentes, condiciones del área).
+            </p>
+
+            <div class="form-group full-width upload-container">
+                <label for="evidence">Seleccionar imágenes:</label>
+                <input type="file" id="evidence" (change)="onFileSelected($event)" accept="image/*" multiple class="file-input">
+        
+                <div class="upload-dropzone">
+                    <p>Arrastre las imágenes aquí o haga clic para buscar</p>
+                </div>
+            </div>
+            
+            <div class="image-preview-container" *ngIf="selectedImages.length > 0">
+                <div *ngFor="let img of selectedImages" class="preview-item">
+                    <img [src]="img.url" alt="Vista previa">
+                    <span>{{ img.name }}</span>
+                </div>
+            </div>
+        </fieldset>
         
         <div class="form-actions">
             <div class="actions-left">
@@ -145,6 +224,5 @@
         <p class="footer-note confidentiality-note">
             Los reportes voluntarios de peligro serán confidenciales, por lo que el nombre y correo electrónico son requeridos con el único fin de que pueda recibir retroalimentación de las acciones generadas al respecto, su identidad no será revelada en ninguna circunstancia a cualquier persona del medio aeronáutico, sin su conocimiento.
         </p>
-    
     </form>
 </div>

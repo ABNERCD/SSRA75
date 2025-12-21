@@ -3,7 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; // 👈 IMPORTACIÓN NECESARIA PARA EL BOTÓN REGRESAR
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-voluntary-report', 
@@ -19,7 +19,6 @@ export class VoluntaryReportComponent implements OnInit {
 
   reportForm!: FormGroup;
 
-  // 👈 INYECTAR EL ROUTER
   constructor(private fb: FormBuilder, private router: Router) { } 
 
   ngOnInit(): void {
@@ -29,10 +28,6 @@ export class VoluntaryReportComponent implements OnInit {
       // ----------------------------------------------------
       name: [''],
       email: ['', [Validators.email]],
-      
-      // ❌ ELIMINADO: Se elimina 'hazardDescription' para consolidar la descripción
-      
-      // ✅ CAMPOS REQUERIDOS PARA LA "DESCRIPCIÓN GENERAL DEL PELIGRO"
       location: ['', Validators.required],
       localTime: ['', Validators.required], 
       eventDate: ['', Validators.required], 
@@ -40,9 +35,28 @@ export class VoluntaryReportComponent implements OnInit {
       // ✅ DESCRIPCIÓN DETALLADA (Narración)
       hazardDetailDescription: ['', Validators.required], 
       consequences: ['', Validators.required],
-      
       correctiveActionsProposal: ['', Validators.required],
       riskManagement: ['', Validators.required],
+
+      // ----------------------------------------------------
+      // NUEVA SECCIÓN: Análisis y Evaluación (Página 2 del Doc)
+      // ----------------------------------------------------
+      similarFailures: [''],             // Equipo/componente con fallas similares
+      hasAntecedents: [''],              // Antecedentes de sucesos similares
+      staffCount: [0],                   // Miembros de mantenimiento
+      usagePercentage: [''],             // Porcentaje de tiempo de uso
+      passengerThreat: [''],             // Amenaza para los pasajeros
+      livesAtRisk: [''],                 // Vidas que podrían peligrar
+
+      // ----------------------------------------------------
+      // NUEVA SECCIÓN: Estrategias de Mitigación (Página 3 del Doc)
+      // ----------------------------------------------------
+      mitigationReviewDesign: [false],
+      mitigationModOpProcedures: [false],
+      mitigationOrgChanges: [false],
+      mitigationStaffTraining: [false],
+      mitigationEmergencyPlans: [false],
+      mitigationCessation: [false],
 
       // ----------------------------------------------------
       // SECCIÓN: Matrices de Riesgo
@@ -52,23 +66,39 @@ export class VoluntaryReportComponent implements OnInit {
     });
   }
 
-  // 👈 FUNCIÓN PARA EL BOTÓN "REGRESAR AL DASHBOARD"
   onGoBack(): void {
-    // Navega a la ruta principal de tu dashboard
     this.router.navigate(['/dashboard']); 
   }
 
   onSubmit(): void {
     if (this.reportForm.valid) {
       console.log('✅ Formulario enviado con éxito. Datos:', this.reportForm.value);
-      
-      // ⚠️ AQUÍ DEBE IR LA LLAMADA A TU SERVICIO PARA ENVIAR AL BACKEND
-      
       alert('Reporte Voluntario enviado. ¡Gracias por contribuir a la seguridad!');
       this.reportForm.reset();
     } else {
       console.error('❌ Formulario inválido. Revise los campos requeridos.');
       this.reportForm.markAllAsTouched();
+    }
+  }
+
+  // Agrega esta propiedad a tu clase
+  selectedImages: any[] = [];
+  
+  // Función para manejar la selección de archivos
+  onFileSelected(event: any): void {
+    const files = event.target.files;
+    if (files) {
+      for (let file of files) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.selectedImages.push({
+            name: file.name,
+            url: e.target.result,
+            file: file
+          });
+        };
+        reader.readAsDataURL(file);
+      }
     }
   }
 }
