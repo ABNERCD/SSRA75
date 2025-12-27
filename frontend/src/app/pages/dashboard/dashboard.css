@@ -118,13 +118,6 @@ body {
   scrollbar-color: #cbd5e1 transparent; /* Color de la barra para Firefox */
 }
 
-/* Flecha decorativa */
-.dropdown-menu::before {
-  content: ''; position: absolute; top: -6px; left: 24px;
-  width: 12px; height: 12px; background: white;
-  transform: rotate(45deg); border-top: 1px solid #e2e8f0; border-left: 1px solid #e2e8f0;
-}
-
 /* Estilos para que la barra de scroll se vea elegante en Chrome, Edge y Safari */
 .dropdown-menu::-webkit-scrollbar {
   width: 6px;               /* Ancho de la barra */
@@ -139,7 +132,12 @@ body {
   border-radius: 10px;      /* Bordes redondeados */
 }
 
-
+/* Flecha decorativa */
+.dropdown-menu::before {
+  content: ''; position: absolute; top: -6px; left: 24px;
+  width: 12px; height: 12px; background: white;
+  transform: rotate(45deg); border-top: 1px solid #e2e8f0; border-left: 1px solid #e2e8f0;
+}
 
 .menu-container.active .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
 

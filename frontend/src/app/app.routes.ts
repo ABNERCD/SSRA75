@@ -9,6 +9,7 @@ import { authGuard } from './auth/auth.guard';
 
 // 1. IMPORTAR EL COMPONENTE DE REPORTE VOLUNTARIO
 import { VoluntaryReportComponent } from './pages/voluntary-report/voluntary-report'; 
+import { ReportePistaComponent } from './pages/reporte-pista/reporte-pista';
 // Asegúrate de que esta ruta de importación sea correcta (ajústala si es necesario).
 
 export const routes: Routes = [
@@ -54,6 +55,12 @@ export const routes: Routes = [
         path: 'reporte-voluntario', 
         component: VoluntaryReportComponent,
         canActivate: [authGuard] // Protege con el mismo guardia que el dashboard
+    },
+
+    {
+        path: 'reporte-pista',
+        component: ReportePistaComponent,
+        canActivate: [authGuard]
     },
 
     // RUTA COMODÍN
