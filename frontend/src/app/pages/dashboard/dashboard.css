@@ -103,11 +103,19 @@ body {
   border-radius: 12px; 
   box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 10px rgba(0,0,0,0.05);
   padding: 10px 0; 
-  opacity: 0; visibility: hidden; 
+  opacity: 0; 
+  visibility: hidden; 
   transform: translateY(-15px); 
   transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
   z-index: 2000;
   border: 1px solid #e2e8f0;
+
+  /* --- NUEVAS PROPIEDADES PARA EL SCROLL --- */
+  max-height: 75vh;          /* El menú no ocupará más del 75% de la altura de la pantalla */
+  overflow-y: auto;          /* Habilita el scroll vertical si el contenido sobrepasa el max-height */
+  overflow-x: hidden;        /* Evita que aparezca scroll horizontal */
+  scrollbar-width: thin;     /* Barra de scroll delgada para Firefox */
+  scrollbar-color: #cbd5e1 transparent; /* Color de la barra para Firefox */
 }
 
 /* Flecha decorativa */
@@ -116,6 +124,22 @@ body {
   width: 12px; height: 12px; background: white;
   transform: rotate(45deg); border-top: 1px solid #e2e8f0; border-left: 1px solid #e2e8f0;
 }
+
+/* Estilos para que la barra de scroll se vea elegante en Chrome, Edge y Safari */
+.dropdown-menu::-webkit-scrollbar {
+  width: 6px;               /* Ancho de la barra */
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;  /* Fondo de la pista del scroll */
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* Color de la barrita */
+  border-radius: 10px;      /* Bordes redondeados */
+}
+
+
 
 .menu-container.active .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
 
