@@ -1,0 +1,228 @@
+<header class="main-header">
+    <div class="logo-container">
+        <img src="assets/images/LogoTaller.jpg" alt="Logo Taller 75" class="logo">
+        <span class="logo-text">Aeronacional</span>
+    </div>
+</header>
+
+<div class="report-container">
+    <div class="header-section">
+        <img src="assets/images/LogoTaller.jpg" alt="Logo de la Empresa" class="logo-img">
+        <h1>REPORTE DE INCAPACITACION TECNICO</h1>
+        <div class="report-meta">
+            <label>Fecha: ____________________</label>
+            <label>Reporte No. ______ / ______</label>
+        </div>        
+    </div>
+
+    <p class="info-text">
+        La información que sea proporcionada en esta forma será usada solamente para aumentar la seguridad operacional.
+        Puede elegir no escribir su nombre. Si es ese el caso, llene adecuadamente los espacios del formulario.
+    </p>
+
+    <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+        <fieldset class="section">
+            <legend>Información Personal</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Nombre: </label>
+                    <input type="text" id="name" formCpntrolName="name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" formControlName="email">
+                    <div *ngIf="reportForm.get('email')?.hasError && reportForm.get('email')?.touched" class="error-message">
+                        Ingrese un correo electrónico válido
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="section">
+            <legend>Desciba de manera general el peligro</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="location">Lugar: <span class="required">*</span></label>
+                    <input type="text" id="location" FormControlName="location">
+                    <div *ngIf="reportForm.get('location')?.invalid && reportForm.get('location')?.touched" class="error-message">
+                        El lugar es requerida.
+                    </div>
+                </div>
+                <div class="form-group time-group">
+                    <label for="localTime">Hora local: <span class="required">*</span></label>
+                    <input type="time" id="localTime" formControlName="localTime">
+                    <div *ngIf="reportForm.get('localTime')?.invalid && reportForm.get('localTime')?.touched" class="error-message">
+                        La hora local es requerida.
+                    </div>
+                </div>
+                <div class="form-group date-group">
+                    <label for="eventDate">Fecha del evento: <span class="required">*</span></label>
+                    <input type="date" id="eventDate" formControlName="eventDate">
+                    <div *ngIf="reportForm.get('eventDate')?.invalid && reportForm.get('eventDate')?.touched" class="error-message">
+                        La fecha del evento es requerida.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="hazardDetailDescription">Descripción del peligro (Narración detallada): <span class="required">*</span></label> 
+                <textarea id="hazardDetailDescription" formControlName="hazardDetailDescription" rows="3"></textarea>
+                <div *ngIf="reportForm.get('hazardDetailDescription')?.invalid && reportForm.get('hazardDetailDescription')?.touched" class="error-message">
+                    La descripción detallada es requerida.
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="consequences">Consecuencias: <span class="required">*</span></label>
+                <textarea id="consequences" formControlName="consequences" rows="2"></textarea>
+                <div *ngIf="reportForm.get('consequences')?.invalid && reportForm.get('consequences')?.touched" class="error-message">
+                    Las consecuencias son requeridas.
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="correctiveActionsProposal">Propuesta de acciones correctivas: <span class="required">*</span></label>
+                <textarea id="correctiveActionsProposal" formControlName="correctiveActionsProposal" rows="3"></textarea>
+                <div *ngIf="reportForm.get('correctiveActionsProposal')?.invalid && reportForm.get('correctiveActionsProposal')?.touched" class="error-message">
+                    La propuesta de acciones correctivas es requerida.
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="section analysis-section">
+            <legend>Análisis y Evaluación del Riesgo (Taller 75)</legend>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="similarFailures">¿Se han identificado condiciones críticas o fallas similares en otras áreas de mantenimiento o procesos técnicos?</label>
+                    <input type="text" id="similarFailures" formControlName="similarFailures" placeholder="n/a">
+                </div>
+                <div class="form-group">
+                    <label>¿Existen antecedentes de sucesos similares?</label>
+                    <div class="radio-group-inline">
+                        <label><input type="radio" formControlName="hasAntecedents" value="si"> Sí </label>
+                        <label><input type="radio" formControlName="hasAntecedents" value="no"> No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="staffCount">¿Cuántas veces se ha realizado esta misma tarea técnica o procedimiento bajo condiciones similares en las últimas 24 horas?</label>
+                    <input type="number" id="staffCount" formControlName="staffCount">
+                </div>
+                <div class="form-group">
+                    <label for="usagePercentage">¿Porcentaje de funcionalidad o operatividad del sistema/equipo que se vio afectado por la falla?</label>
+                    <input type="text" id="usagePercentage" formControlName="usagePercentage" placeholder=" Por tercios ej. 25%, 50%, 75%...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>¿Existe la probabilidad de que el peligro sea una amenaza para los pasajeros?</label>
+                <div class="radio-group-inline">
+                    <label><input type="radio" formControlName="passengerThreat" value="si"> Sí</label>
+                    <label><input type="radio" formControlName="passengerThreat" value="no"> No</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="livesAtRisk">¿Cuántas vidas podrían peligrar? (Empleados, pasajeros, público):</label>
+                <input type="text" id="livesAtRisk" formControlName="livesAtRisk">
+            </div>
+        </fieldset>
+
+        <fieldset class="section mitigation-strategies">
+            <legend>Estrategias Específicas de Mitigación</legend>
+            <p class="instruction-text">Seleccione las estrategias aplicables para mitigar el riesgo:</p>
+    
+            <div class="checkbox-group-right">
+                <label>Evaluar la reingeniería de sistemas o actualización de la infraestructura tecnológica. <input type="checkbox" formControlName="mitigationReviewDesign"></label>
+                <label>Optimizar los manuales operativos y las guías de resolución de fallas (Troubleshooting). <input type="checkbox" formControlName="mitigationModOpProcedures"></label>
+                <label>Redistribuir las cargas horarias para mitigar la fatiga y fortalecer el liderazgo en sitio. <input type="checkbox" formControlName="mitigationOrgChanges"></label>
+                <label>Implementar programas de adiestramiento técnico y certificación en competencias críticas <input type="checkbox" formControlName="mitigationStaffTraining"></label>
+                <label>Ejecutar protocolos de respuesta ante averías mayores y planes de continuidad del servicio. <input type="checkbox" formControlName="mitigationEmergencyPlans"></label>
+                <label>Interrupción inmediata de la actividad técnica o desenergización de equipos de riesgo. <input type="checkbox" formControlName="mitigationCessation"></label>
+            </div>
+        </fieldset>
+
+        <fieldset class="section risk-management-section">
+            <legend>Gestión del riesgo</legend> 
+            <div class="form-group full-width">
+                <label for="riskManagement">Gestión del riesgo (Texto libre): <span class="required">*</span></label>
+                <textarea id="riskManagement" formControlName="riskManagement" rows="2"></textarea>
+                <div *ngIf="reportForm.get('riskManagement')?.invalid && reportForm.get('riskManagement')?.touched" class="error-message">
+                    La descripción de gestión del riesgo es requerida.
+                </div>
+            </div>
+
+            <div class="matrix-group">
+                <label class="matrix-title">Probabilidad del evento (Marque con [X] el área que considere describe el evento): <span class="required">*</span></label>
+                <div class="radio-options probability-options">
+                    <label><input type="radio" formControlName="eventProbability" value="5 frecuente"> 5 frecuente</label>
+                    <label><input type="radio" formControlName="eventProbability" value="4 ocasional"> 4 ocasional</label>
+                    <label><input type="radio" formControlName="eventProbability" value="3 remoto"> 3 remoto</label>
+                    <label><input type="radio" formControlName="eventProbability" value="2 improbable"> 2 improbable</label>
+                    <label><input type="radio" formControlName="eventProbability" value="1 extremadamente improbable"> 1 extremadamente improbable</label>
+                </div>
+                <div *ngIf="reportForm.get('eventProbability')?.invalid && reportForm.get('eventProbability')?.touched" class="error-message">
+                    Seleccione la probabilidad del evento.
+                </div>
+            </div>
+
+            <div class="matrix-group">
+                <label class="matrix-title">Severidad del evento (Marque con [X] el área que considere describe el evento): <span class="required">*</span></label>
+                <div class="radio-options severity-options">
+                    <label><input type="radio" formControlName="eventSeverity" value="A catastrófica"> A catastrófica</label>
+                    <label><input type="radio" formControlName="eventSeverity" value="B peligroso"> B peligroso</label>
+                    <label><input type="radio" formControlName="eventSeverity" value="C mayor"> C mayor</label>
+                    <label><input type="radio" formControlName="eventSeverity" value="D menor"> D menor</label>
+                    <label><input type="radio" formControlName="eventSeverity" value="E insignificante"> E insignificante</label>
+                </div>
+                <div *ngIf="reportForm.get('eventSeverity')?.invalid && reportForm.get('eventSeverity')?.touched" class="error-message">
+                    Seleccione la severidad del evento.
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="section evidence-section">
+            <legend>Evidencia Fotográfica</legend>
+            <p class="info-text">
+                Suba imágenes que ayuden a detallar el peligro identificado (ej. daños en componentes, condiciones del área).
+            </p>
+
+            <div class="form-group full-width upload-container">
+                <label for="evidence">Seleccionar imágenes:</label>
+                <input type="file" id="evidence" (change)="onFileSelected($event)" accept="image/*" multiple class="file-input">
+        
+                <div class="upload-dropzone">
+                    <p>Arrastre las imágenes aquí o haga clic para buscar</p>
+                </div>
+            </div>
+            
+            <div class="image-preview-container" *ngIf="selectedImages.length > 0">
+                <div *ngFor="let img of selectedImages" class="preview-item">
+                    <img [src]="img.url" alt="Vista previa">
+                    <span>{{ img.name }}</span>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="form-actions">
+            <div class="actions-left">
+                <button type="button" (click)="onGoBack()" class="btn-secondary">Regresar</button> 
+            </div>
+            
+            <div class="actions-right">
+                <button type="button" (click)="reportForm.reset()" class="btn-secondary">Limpiar Formulario</button>
+                <button type="submit" [disabled]="reportForm.invalid" class="btn-primary">Enviar Reporte</button>
+            </div>
+        </div>
+        
+        <p class="footer-note">
+            El presente reporte deberá ser depositado en el buzón dispuesto en la organización para tal fin o enviado a la dirección de <a href="mailto:taller75@aeronacional.com">taller75@aeronacional.com</a>
+        </p>
+        <p class="footer-note confidentiality-note">
+            Los reportes de incapacitación técnico serán confidenciales, por lo que el nombre y correo electrónico son requeridos con el único fin de que pueda recibir retroalimentación de las acciones generadas al respecto, su identidad no será revelada en ninguna circunstancia a cualquier persona del medio aeronáutico, sin su conocimiento.
+        </p>
+    </form>
+</div>
