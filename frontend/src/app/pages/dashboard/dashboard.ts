@@ -61,7 +61,9 @@ export class DashboardComponent implements OnInit {
     console.log(`Navegando a reporte: ${tipo}`);
     switch(tipo) {
       case 'rpas-avistamiento': break;
-      case 'rpas-danos': break;
+      case 'rpas-danos': 
+        this.router.navigate(['rpas-danos'])
+        break;
       case 'incapacitacion-operador': 
         this.router.navigate(['/incapacitacion-operador'])
         break;
