@@ -11,6 +11,7 @@ import { authGuard } from './auth/auth.guard';
 import { VoluntaryReportComponent } from './pages/voluntary-report/voluntary-report'; 
 import { ReportePistaComponent } from './pages/reporte-pista/reporte-pista';
 import { IncapacitacionTecnicoComponent } from './pages/incapacitacion-tecnico/incapacitacion-tecnico';
+import { IncapacitacionOperadorComponent } from './pages/incapacitacion-operador/incapacitacion-operador';
 // Asegúrate de que esta ruta de importación sea correcta (ajústala si es necesario).
 
 export const routes: Routes = [
@@ -67,6 +68,12 @@ export const routes: Routes = [
     {
         path: 'incapacitacion-tecnico',
         component: IncapacitacionTecnicoComponent,
+        canActivate: [authGuard]
+    },
+
+    {
+        path: 'incapacitacion-operador',
+        component: IncapacitacionOperadorComponent,
         canActivate: [authGuard]
     },
 

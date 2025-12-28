@@ -62,7 +62,9 @@ export class DashboardComponent implements OnInit {
     switch(tipo) {
       case 'rpas-avistamiento': break;
       case 'rpas-danos': break;
-      case 'incapacitacion-operador': break;
+      case 'incapacitacion-operador': 
+        this.router.navigate(['/incapacitacion-operador'])
+        break;
       case 'incapacitacion-tecnico': 
         this.router.navigate(['/incapacitacion-tecnico'])
         break;
