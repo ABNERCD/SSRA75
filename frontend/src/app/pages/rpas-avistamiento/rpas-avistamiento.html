@@ -8,7 +8,7 @@
 <div class="report-container">
     <div class="header-section">
         <img src="assets/images/LogoTaller.jpg" alt="Logo de la Empresa" class="logo-img">
-        <h1>REPORTE DE CONDICIONES GRF</h1>
+        <h1>REPORTE AVISTAMIENTO RPAS</h1>
         <div class="report-meta">
             <label>Fecha: ____________________</label>
             <label>Reporte No. ______ / ______</label>
@@ -94,7 +94,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="similarFailures">¿Se han identificado condiciones críticas similares en otras áreas de movimiento o superficies de rodaje?</label>
+                    <label for="similarFailures">¿Se han registrado avistamientos recurrentes o incursiones de RPAS similares en este sector geográfico o dentro de las zonas de protección de este aeródromo?</label>
                     <input type="text" id="similarFailures" formControlName="similarFailures" placeholder="n/a">
                 </div>
                 <div class="form-group">
@@ -108,11 +108,11 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="staffCount">¿Cuántas inspecciones de pista se han realizado bajo estas mismas condiciones climáticas en las últimas 24 horas?</label>
+                    <label for="staffCount">¿Cuántas aeronaves se encontraban en fase crítica (aproximación, despegue o rodaje) dentro del área de influencia al momento del avistamiento?</label>
                     <input type="number" id="staffCount" formControlName="staffCount">
                 </div>
                 <div class="form-group">
-                    <label for="usagePercentage">¿Porcentaje de la superficie de la pista que se encuentra cubierta por el contaminante?</label>
+                    <label for="usagePercentage">¿Porcentaje de afectación o daño estructural identificado en la célula y los sistemas críticos de la aeronave?</label>
                     <input type="text" id="usagePercentage" formControlName="usagePercentage" placeholder=" Por tercios ej. 25%, 50%, 75%...">
                 </div>
             </div>
@@ -136,15 +136,15 @@
             <p class="instruction-text">Seleccione las estrategias aplicables para mitigar el riesgo:</p>
     
             <div class="checkbox-group-right">
-                <label>Revisar el diseño de drenajes o infraestructura de la pista <input type="checkbox" formControlName="mitigationReviewDesign"></label>
-                <label>Ajustar procedimientos de limpieza y despeje de contaminantes <input type="checkbox" formControlName="mitigationModOpProcedures"></label>
-                <label>Reorganizar turnos de inspección visual y técnica de pista <input type="checkbox" formControlName="mitigationOrgChanges"></label>
-                <label>Capacitación en evaluación de contaminantes y uso de matriz RCAM <input type="checkbox" formControlName="mitigationStaffTraining"></label>
-                <label>Activar protocolos de NOTAM y planes de contingencia por baja fricción <input type="checkbox" formControlName="mitigationEmergencyPlans"></label>
-                <label>Cierre temporal de pista o suspensión de operaciones aéreas <input type="checkbox" formControlName="mitigationCessation"></label>
+                <label>Solicitar la inspección técnica de sistemas de detección (Radar/RF) y cámaras perimetrales. <input type="checkbox" formControlName="mitigationReviewDesign"></label>
+                <label>Actualizar procedimientos de notificación a Torre de Control (ATC) y protocolos de seguridad física. <input type="checkbox" formControlName="mitigationModOpProcedures"></label>
+                <label>Incrementar la vigilancia en las zonas de aproximación y puntos ciegos identificados del aeródromo. <input type="checkbox" formControlName="mitigationOrgChanges"></label>
+                <label>Capacitación del personal en identificación de RPAS y procedimientos de reporte inmediato (Sighting). <input type="checkbox" formControlName="mitigationStaffTraining"></label>
+                <label>Activar el Plan de Contingencia para Interferencia Ilícita y coordinación con fuerzas de seguridad. <input type="checkbox" formControlName="mitigationEmergencyPlans"></label>
+                <label>Cierre temporal del espacio aéreo o suspensión de despegues/aterrizajes en el sector afectado. <input type="checkbox" formControlName="mitigationCessation"></label>
             </div>
         </fieldset>
-
+        
         <fieldset class="section risk-management-section">
             <legend>Gestión del riesgo</legend> 
             <div class="form-group full-width">
@@ -222,7 +222,7 @@
             El presente reporte deberá ser depositado en el buzón dispuesto en la organización para tal fin o enviado a la dirección de <a href="mailto:taller75@aeronacional.com">taller75@aeronacional.com</a>
         </p>
         <p class="footer-note confidentiality-note">
-            Los reportes de condiciones GRF serán confidenciales, por lo que el nombre y correo electrónico son requeridos con el único fin de que pueda recibir retroalimentación de las acciones generadas al respecto, su identidad no será revelada en ninguna circunstancia a cualquier persona del medio aeronáutico, sin su conocimiento.
+            Los reportes de avistamiento por RPAS serán confidenciales, por lo que el nombre y correo electrónico son requeridos con el único fin de que pueda recibir retroalimentación de las acciones generadas al respecto, su identidad no será revelada en ninguna circunstancia a cualquier persona del medio aeronáutico, sin su conocimiento.
         </p>
     </form>
 </div>

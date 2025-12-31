@@ -13,6 +13,7 @@ import { ReportePistaComponent } from './pages/reporte-pista/reporte-pista';
 import { IncapacitacionTecnicoComponent } from './pages/incapacitacion-tecnico/incapacitacion-tecnico';
 import { IncapacitacionOperadorComponent } from './pages/incapacitacion-operador/incapacitacion-operador';
 import { RpasDanosComponent } from './pages/rpas-danos/rpas-danos';
+import { RpasAvistamientoComponent } from './pages/rpas-avistamiento/rpas-avistamiento';
 // Asegúrate de que esta ruta de importación sea correcta (ajústala si es necesario).
 
 export const routes: Routes = [
@@ -81,6 +82,12 @@ export const routes: Routes = [
     {
         path: 'rpas-danos',
         component: RpasDanosComponent,
+        canActivate: [authGuard]
+    },
+
+    {
+        path: 'rpas-avistamiento',
+        component: RpasAvistamientoComponent,
         canActivate: [authGuard]
     },
 

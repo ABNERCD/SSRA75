@@ -43,7 +43,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="location">Lugar: <span class="required">*</span></label>
-                    <input type="text" id="location" FormControlName="location">
+                    <input type="text" id="location" formControlName="location">
                     <div *ngIf="reportForm.get('location')?.invalid && reportForm.get('location')?.touched" class="error-message">
                         El lugar es requerida.
                     </div>
