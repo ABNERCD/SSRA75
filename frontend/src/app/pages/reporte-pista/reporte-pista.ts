@@ -23,10 +23,15 @@ export class ReportePistaComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: Router) { } 
 
   ngOnInit(): void {
+    const today = new Date().toISOString().split('T')[0];
+
     this.reportForm = this.fb.group({
       // ----------------------------------------------------
       // SECCIÓN: Información Personal y del Evento
       // ----------------------------------------------------
+
+      reportDate: [today, Validators.required],
+      reportNumber: ['', Validators.required],
       name: [''],
       email: ['', [Validators.email]],
       location: ['', Validators.required],

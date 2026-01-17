@@ -6,14 +6,32 @@
 </header>
 
 <div class="report-container">
-    <div class="header-section">
-        <img src="assets/images/LogoTaller.jpg" alt="Logo de la Empresa" class="logo-img">
-        <h1>REPORTE DE INCAPACITACION OPERADOR</h1>
-        <div class="report-meta">
-            <label>Fecha: ____________________</label>
-            <label>Reporte No. ______ / ______</label>
-        </div>        
-    </div>
+    <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+
+        <div class="header-section">
+            <img src="assets/images/LogoTaller.jpg" alt="Logo de la Empresa" class="logo-img">
+            <h1>REPORTE DE INCAPACITACION OPERADOR</h1>
+            
+            <div class="report-meta">
+                <div class="meta-field">
+                    <label for="reportDate">Fecha de Elaboración:</label>
+                    <input type="date" 
+                           id="reportDate" 
+                           formControlName="reportDate" 
+                           class="inline-input-date">
+                </div>
+                
+                <div class="meta-field">
+                    <label for="reportNumber">Reporte No.</label>
+                    <input type="text" 
+                           id="reportNumber" 
+                           formControlName="reportNumber" 
+                           class="inline-input" 
+                           placeholder="___ / ___">
+                </div>
+            </div>        
+        </div>
+    </form>
 
     <p class="info-text">
         La información que sea proporcionada en esta forma será usada solamente para aumentar la seguridad operacional.
