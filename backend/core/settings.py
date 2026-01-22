@@ -39,10 +39,10 @@ INSTALLED_APPS = [
 
 # --- Middleware (Agregando CORS) ---
 MIDDLEWARE = [
+    # CORS Headers debe ir antes de CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # CORS Headers debe ir antes de CommonMiddleware
-    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -113,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'es-mx' 
 TIME_ZONE = 'America/Mexico_City' 
 USE_I18N = True
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -133,6 +133,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',  # Angular default port
     'http://127.0.0.1:4200',
 ]
+# Esto es muy importante para que el interceptor de Angular pueda enviar el Token JWT
+CORS_ALLOW_CREDENTIALS = True
+
 # Si necesitas permitir peticiones desde cualquier origen (solo en desarrollo)
 # CORS_ALLOW_ALL_ORIGINS = True 
 

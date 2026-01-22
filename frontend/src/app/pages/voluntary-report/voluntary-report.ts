@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ReporteService } from '../../services/reporte.service'; //
 
 @Component({
   selector: 'app-voluntary-report', 
@@ -18,52 +19,47 @@ import { Router } from '@angular/router';
 export class VoluntaryReportComponent implements OnInit {
 
   reportForm!: FormGroup;
+  selectedImages: any[] = [];
 
-  constructor(private fb: FormBuilder, private router: Router) { } 
+  // Inyectamos el servicio en el constructor
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private reporteService: ReporteService 
+  ) { } 
 
   ngOnInit(): void {
-    const today = new Date().toISOString().split('T')[0];
+    // Obtenemos la fecha actual
+  const hoy = new Date();
+  
+  // Ajustamos la fecha restando el desfase de la zona horaria (en minutos)
+  // Esto asegura que 'hoy' refleje la hora de México para el string final
+  const offset = hoy.getTimezoneOffset() * 60000;
+  const localDate = new Date(hoy.getTime() - offset).toISOString().split('T')[0];
     this.reportForm = this.fb.group({
-      // ----------------------------------------------------
-      // SECCIÓN: Información Personal y del Evento
-      // ----------------------------------------------------
-      reportDate: [today, Validators.required], // Se inicializa hoy, pero es editable
+      reportDate: [localDate, Validators.required],
       reportNumber: ['', Validators.required],
       name: [''],
       email: ['', [Validators.email]],
       location: ['', Validators.required],
       localTime: ['', Validators.required], 
       eventDate: ['', Validators.required], 
-      
-      // ✅ DESCRIPCIÓN DETALLADA (Narración)
       hazardDetailDescription: ['', Validators.required], 
       consequences: ['', Validators.required],
       correctiveActionsProposal: ['', Validators.required],
       riskManagement: ['', Validators.required],
-
-      // ----------------------------------------------------
-      // NUEVA SECCIÓN: Análisis y Evaluación (Página 2 del Doc)
-      // ----------------------------------------------------
-      similarFailures: [''],             // Equipo/componente con fallas similares
-      hasAntecedents: [''],              // Antecedentes de sucesos similares
-      staffCount: [0],                   // Miembros de mantenimiento
-      usagePercentage: [''],             // Porcentaje de tiempo de uso
-      passengerThreat: [''],             // Amenaza para los pasajeros
-      livesAtRisk: [''],                 // Vidas que podrían peligrar
-
-      // ----------------------------------------------------
-      // NUEVA SECCIÓN: Estrategias de Mitigación (Página 3 del Doc)
-      // ----------------------------------------------------
+      similarFailures: [''],
+      hasAntecedents: [''],
+      staffCount: [0],
+      usagePercentage: [''],
+      passengerThreat: [''],
+      livesAtRisk: [''],
       mitigationReviewDesign: [false],
       mitigationModOpProcedures: [false],
       mitigationOrgChanges: [false],
       mitigationStaffTraining: [false],
       mitigationEmergencyPlans: [false],
       mitigationCessation: [false],
-
-      // ----------------------------------------------------
-      // SECCIÓN: Matrices de Riesgo
-      // ----------------------------------------------------
       eventProbability: ['', Validators.required], 
       eventSeverity: ['', Validators.required] 
     });
@@ -75,19 +71,66 @@ export class VoluntaryReportComponent implements OnInit {
 
   onSubmit(): void {
     if (this.reportForm.valid) {
-      console.log('✅ Formulario enviado con éxito. Datos:', this.reportForm.value);
-      alert('Reporte Voluntario enviado. ¡Gracias por contribuir a la seguridad!');
-      this.reportForm.reset();
+      const formValue = this.reportForm.value;
+
+      const payload = {
+        numero_reporte_manual: formValue.reportNumber,
+        fecha_elaboracion: formValue.reportDate,
+        tipo_reporte: 'Voluntario',
+        subtipo: 'Voluntario',
+
+        detalles: {
+          nombre_reportante: formValue.name,
+          correo_reportante: formValue.email,
+          lugar: formValue.location,
+          hora_local: formValue.localTime, // Mapeo correcto para Postgres
+          fecha_evento: formValue.eventDate,
+          probabilidad: formValue.eventProbability,
+          severidad: formValue.eventSeverity,
+          
+          detalles_completos_json: JSON.stringify({
+            descripcion_peligro: formValue.hazardDetailDescription,
+            consecuencias: formValue.consequences,
+            propuesta_acciones: formValue.correctiveActionsProposal,
+            gestion_riesgo: formValue.riskManagement,
+            analisis: {
+              fallas_similares: formValue.similarFailures,
+              antecedentes: formValue.hasAntecedents,
+              personal_mantenimiento: formValue.staffCount,
+              porcentaje_uso: formValue.usagePercentage,
+              amenaza_pasajeros: formValue.passengerThreat,
+              vidas_riesgo: formValue.livesAtRisk
+            },
+            mitigacion: {
+              revisar_diseno: formValue.mitigationReviewDesign,
+              modificar_procedimientos: formValue.mitigationModOpProcedures,
+              cambios_organizacion: formValue.mitigationOrgChanges,
+              entrenamiento: formValue.mitigationStaffTraining,
+              planes_emergencia: formValue.mitigationEmergencyPlans,
+              cese_operaciones: formValue.mitigationCessation
+            }
+          })
+        }
+      };
+
+      this.reporteService.guardarReporteVoluntario(payload).subscribe({
+        next: (res) => {
+          console.log('✅ Reporte guardado:', res);
+          alert('Reporte Voluntario enviado con éxito.');
+          this.reportForm.reset();
+          this.selectedImages = [];
+        },
+        error: (err) => {
+          console.error('❌ Error del servidor:', err.error);
+          alert('Error al enviar. Revise los datos e intente de nuevo.');
+        }
+      });
+
     } else {
-      console.error('❌ Formulario inválido. Revise los campos requeridos.');
       this.reportForm.markAllAsTouched();
     }
   }
 
-  // Agrega esta propiedad a tu clase
-  selectedImages: any[] = [];
-  
-  // Función para manejar la selección de archivos
   onFileSelected(event: any): void {
     const files = event.target.files;
     if (files) {
