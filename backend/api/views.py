@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Importamos tus modelos y serializers (Agregamos ReporteVoluntario)
-from .models import Rol, TipoUsuario, Usuario, Reporte, ReporteVoluntario, EstadisticasReporte
+from .models import Rol, TipoUsuario, Usuario, Reporte, ReporteGenerado, EstadisticasReporte
 from .serializers import (
     RolSerializer, 
     TipoUsuarioSerializer, 

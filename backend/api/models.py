@@ -79,12 +79,19 @@ class Reporte(models.Model):
     def __str__(self):
         return f"Reporte {self.numero_reporte_manual} ({self.tipo_reporte})"
 
-class ReporteVoluntario(models.Model):
-    id_reporte = models.OneToOneField(Reporte, on_delete=models.CASCADE, primary_key=True, db_column='id_reporte')
+class ReporteGenerado(models.Model): # Cambiamos el nombre de la clase
+    # El related_name 'detalles_reporte' es el que usaremos en el Serializer
+    id_reporte = models.OneToOneField(
+        Reporte, 
+        on_delete=models.CASCADE, 
+        primary_key=True, 
+        db_column='id_reporte',
+        related_name='detalles_reporte' 
+    )
     nombre_reportante = models.CharField(max_length=255, null=True, blank=True)
     correo_reportante = models.CharField(max_length=255, null=True, blank=True)
     
-    # Agregamos los campos que definiste en PostgreSQL como NOT NULL
+    # Campos obligatorios sincronizados con tu SQL
     lugar = models.CharField(max_length=255)
     hora_local = models.TimeField()
     fecha_evento = models.DateField()
@@ -94,8 +101,8 @@ class ReporteVoluntario(models.Model):
     detalles_completos_json = models.TextField()
 
     class Meta:
-        db_table = 'reporte_voluntario'
-        verbose_name_plural = "Detalles de Reportes Voluntarios"
+        db_table = 'reportes_generados' # <--- DEBE coincidir con el ALTER TABLE de Postgres
+        verbose_name_plural = "Detalles de Reportes Generados"
 
 class EstadisticasReporte(models.Model):
     id_estadistica = models.AutoField(primary_key=True)

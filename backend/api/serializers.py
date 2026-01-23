@@ -1,7 +1,7 @@
 from rest_framework import serializers
 # Necesario para el Login personalizado
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer 
-from .models import Rol, TipoUsuario, Usuario, Reporte, ReporteVoluntario, EstadisticasReporte
+from .models import Rol, TipoUsuario, Usuario, Reporte, ReporteGenerado, EstadisticasReporte
 import json
 
 # -------------------------------------------------------------
@@ -56,23 +56,21 @@ class RegistroSerializer(serializers.ModelSerializer):
 # --- Serializers de REPORTES (Estructura SSRA75) ---
 # -------------------------------------------------------------
 
-# 1. Serializador para la tabla de estadísticas
 class EstadisticasReporteSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadisticasReporte
         fields = '__all__'
 
-# 2. Serializador para la LISTA general
 class ReporteSerializer(serializers.ModelSerializer):
     nombre_usuario = serializers.ReadOnlyField(source='id_usuario.nombre')
     class Meta:
         model = Reporte
         fields = ('id_reporte', 'id_usuario', 'nombre_usuario', 'numero_reporte_manual', 'tipo_reporte', 'fecha_elaboracion', 'estatus')
 
-# 3. Serializer para la tabla de detalles (Estadística + JSON)
-class ReporteVoluntarioDetalleSerializer(serializers.ModelSerializer):
+# 3. Serializer de Detalles (Renombrado para ser general)
+class ReporteGeneradoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ReporteVoluntario
+        model = ReporteGenerado
         fields = [
             'nombre_reportante', 
             'correo_reportante', 
@@ -84,11 +82,10 @@ class ReporteVoluntarioDetalleSerializer(serializers.ModelSerializer):
             'detalles_completos_json'
         ]
 
-# 4. Serializer Maestro (Triple Inserción)
+# 4. Serializer Maestro (Triple Inserción con Nueva Tabla)
 class ReporteVoluntarioCreateSerializer(serializers.ModelSerializer):
-    # Usamos source='reportevoluntario' para que Django sepa leer los 
-    # datos del modelo hijo en la respuesta JSON.
-    detalles = ReporteVoluntarioDetalleSerializer(source='reportevoluntario')
+    # 'source' apunta al related_name que pusimos en el modelo
+    detalles = ReporteGeneradoSerializer(source='detalles_reporte')
 
     class Meta:
         model = Reporte
@@ -96,17 +93,17 @@ class ReporteVoluntarioCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ['id_reporte']
 
     def create(self, validated_data):
-        # Al usar 'source', la llave interna en validated_data cambia a 'reportevoluntario'
-        detalles_data = validated_data.pop('reportevoluntario')
+        # Extraemos usando la relación inversa 'detalles_reporte'
+        detalles_data = validated_data.pop('detalles_reporte')
         usuario = self.context['request'].user
         
-        # 1. Crear en tabla 'reportes'
+        # 1. Crear registro en tabla 'reportes'
         reporte_madre = Reporte.objects.create(id_usuario=usuario, **validated_data)
         
-        # 2. Crear en 'reporte_voluntario'
-        ReporteVoluntario.objects.create(id_reporte=reporte_madre, **detalles_data)
+        # 2. Crear registro en la nueva tabla 'reportes_generados'
+        ReporteGenerado.objects.create(id_reporte=reporte_madre, **detalles_data)
 
-        # 3. Crear en 'estadisticas_reportes'
+        # 3. Crear registro en 'estadisticas_reportes'
         try:
             raw_json = json.loads(detalles_data['detalles_completos_json'])
             EstadisticasReporte.objects.create(

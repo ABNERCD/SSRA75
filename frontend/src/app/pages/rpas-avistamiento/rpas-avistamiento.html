@@ -47,10 +47,10 @@
                     <input type="text" id="name" formControlName="name">
                 </div>
                 <div class="form-group">
-                    <label for="email">Correo electrónico</label>
+                    <label for="email">Correo electrónico:</label>
                     <input type="email" id="email" formControlName="email">
-                    <div *ngIf="reportForm.get('email')?.hasError && reportForm.get('email')?.touched" class="error-message">
-                        Ingrese un correo electrónico válido
+                    <div *ngIf="reportForm.get('email')?.hasError('email') && reportForm.get('email')?.touched" class="error-message">
+                        Ingrese un correo electrónico válido.
                     </div>
                 </div>
             </div>
@@ -244,3 +244,6 @@
         </p>
     </form>
 </div>
+
+<pre>¿Es válido el formulario?: {{ reportForm.valid }}</pre>
+<pre>Errores: {{ reportForm.errors | json }}</pre>
