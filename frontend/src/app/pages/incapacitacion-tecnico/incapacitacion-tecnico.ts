@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ReporteService } from '../../services/reporte.service'; // Inyectar servicio
 
 @Component({
   selector: 'app-incapacitacion-tecnico', 
@@ -18,16 +19,21 @@ export class IncapacitacionTecnicoComponent implements OnInit {
   reportForm!: FormGroup;
   selectedImages: any[] = [];
 
-  constructor(private fb: FormBuilder, private router: Router) { } 
+  // Inyectamos el servicio para la base de datos de Aeronacional
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private reporteService: ReporteService 
+  ) { } 
 
   ngOnInit(): void {
-    const today = new Date().toISOString().split('T')[0];
+    // Ajuste de fecha local para evitar errores de registro nocturno
+    const hoy = new Date();
+    const offset = hoy.getTimezoneOffset() * 60000;
+    const localDate = new Date(hoy.getTime() - offset).toISOString().split('T')[0];
 
     this.reportForm = this.fb.group({
-      // ----------------------------------------------------
-      // SECCIÓN: Información Personal y del Evento
-      // ----------------------------------------------------
-      reportDate: [today, Validators.required],
+      reportDate: [localDate, Validators.required],
       reportNumber: ['', Validators.required],
       name: [''],
       email: ['', [Validators.email]],
@@ -35,29 +41,22 @@ export class IncapacitacionTecnicoComponent implements OnInit {
       localTime: ['', Validators.required], 
       eventDate: ['', Validators.required], 
       
-      // CAMPOS ESPECÍFICOS DE INCAPACIDAD TÉCNICA
-      pistaId: ['', Validators.required],      // Identificador de reporte técnico
-      rwycc: ['', Validators.required],        // Código de condición técnica
+      // NOTA: Si estos no existen como inputs en tu HTML, quita Validators.required
+      pistaId: [''], 
+      rwycc: [''], 
 
-      // ✅ DESCRIPCIÓN DETALLADA (Narración)
       hazardDetailDescription: ['', Validators.required], 
       consequences: ['', Validators.required],
       correctiveActionsProposal: ['', Validators.required],
       riskManagement: ['', Validators.required],
 
-      // ----------------------------------------------------
-      // NUEVA SECCIÓN: Análisis y Evaluación
-      // ----------------------------------------------------
-      similarFailures: [''],             // Equipo/componente con fallas similares
-      hasAntecedents: [''],              // Antecedentes de sucesos similares
-      staffCount: [0],                   // Miembros de mantenimiento
-      usagePercentage: [''],             // Porcentaje de tiempo de uso
-      passengerThreat: [''],             // Amenaza para los pasajeros
-      livesAtRisk: [''],                 // Vidas que podrían peligrar
+      similarFailures: [''], 
+      hasAntecedents: [''], 
+      staffCount: [0], 
+      usagePercentage: [''], 
+      passengerThreat: [''], 
+      livesAtRisk: [''], 
 
-      // ----------------------------------------------------
-      // NUEVA SECCIÓN: Estrategias de Mitigación
-      // ----------------------------------------------------
       mitigationReviewDesign: [false],
       mitigationModOpProcedures: [false],
       mitigationOrgChanges: [false],
@@ -65,9 +64,6 @@ export class IncapacitacionTecnicoComponent implements OnInit {
       mitigationEmergencyPlans: [false],
       mitigationCessation: [false],
 
-      // ----------------------------------------------------
-      // SECCIÓN: Matrices de Riesgo
-      // ----------------------------------------------------
       eventProbability: ['', Validators.required], 
       eventSeverity: ['', Validators.required] 
     });
@@ -79,12 +75,72 @@ export class IncapacitacionTecnicoComponent implements OnInit {
 
   onSubmit(): void {
     if (this.reportForm.valid) {
-      console.log('✅ Reporte de Incapacitación Técnica enviado con éxito. Datos:', this.reportForm.value);
-      alert('Reporte de Incapacitación Técnica enviado. ¡Gracias por contribuir a la seguridad!');
-      this.reportForm.reset();
-      this.selectedImages = [];
+      const formValue = this.reportForm.value;
+
+      const payload = {
+        // Datos para la tabla principal 'reportes'
+        numero_reporte_manual: formValue.reportNumber,
+        fecha_elaboracion: formValue.reportDate,
+        tipo_reporte: 'Incapacitación Técnico',
+        subtipo: 'Obligatorio', // Reporte mandatorio por seguridad técnica
+
+        // Datos para la tabla 'reportes_generados'
+        detalles: {
+          nombre_reportante: formValue.name,
+          correo_reportante: formValue.email,
+          lugar: formValue.location,
+          hora_local: formValue.localTime,
+          fecha_evento: formValue.eventDate,
+          probabilidad: formValue.eventProbability,
+          severidad: formValue.eventSeverity,
+
+          // Empaquetado de datos técnicos en JSON
+          detalles_completos_json: JSON.stringify({
+            identificacion_tecnica: {
+              pista_o_id: formValue.pistaId,
+              condicion: formValue.rwycc
+            },
+            analisis: {
+              fallas_similares: formValue.similarFailures,
+              antecedentes: formValue.hasAntecedents,
+              miembros_mantenimiento: formValue.staffCount,
+              porcentaje_uso: formValue.usagePercentage,
+              amenaza_pasajeros: formValue.passengerThreat,
+              vidas_riesgo: formValue.livesAtRisk
+            },
+            narrativa: {
+              descripcion: formValue.hazardDetailDescription,
+              consecuencias: formValue.consequences,
+              propuesta: formValue.correctiveActionsProposal,
+              gestion: formValue.riskManagement
+            },
+            mitigacion: {
+              reingenieria: formValue.mitigationReviewDesign,
+              manuales_operativos: formValue.mitigationModOpProcedures,
+              redistribucion_carga: formValue.mitigationOrgChanges,
+              adiestramiento: formValue.mitigationStaffTraining,
+              protocolos_averia: formValue.mitigationEmergencyPlans,
+              interrupcion_actividad: formValue.mitigationCessation
+            }
+          })
+        }
+      };
+
+      // Guardado en la base de datos PostgreSQL
+      this.reporteService.guardarReporteVoluntario(payload).subscribe({
+        next: (res) => {
+          console.log('✅ Éxito:', res);
+          alert('Reporte de Incapacitación Técnico enviado con éxito.');
+          this.reportForm.reset();
+          this.selectedImages = [];
+        },
+        error: (err) => {
+          console.error('❌ Error:', err.error);
+          alert('Error al enviar el reporte. Verifique la consola.');
+        }
+      });
+
     } else {
-      console.error('❌ Formulario inválido. Revise los campos requeridos.');
       this.reportForm.markAllAsTouched();
     }
   }
