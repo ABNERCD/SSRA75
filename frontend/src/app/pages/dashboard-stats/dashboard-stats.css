@@ -1,0 +1,124 @@
+.main-container { padding: 30px; background-color: #f0f2f5; font-family: 'Segoe UI', Roboto, sans-serif; }
+
+.header-banner {
+  background: #1e3a8a; /* Azul Aeronacional */
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+.card-chart {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e1e4e8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.full-width { grid-column: span 2; }
+
+h3 { color: #1e3a8a; font-size: 1.1rem; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; margin-bottom: 15px; }
+/* Estilo para la caja del contador global */
+.total-box {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #1e3a8a; /* Azul Aeronacional */
+  line-height: 1;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+/* Indicador de Estado con punto parpadeante */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 25px;
+  padding: 10px;
+  background-color: #f0fdf4;
+  border-radius: 20px;
+}
+
+.status-text {
+  color: #16a34a; /* Verde institucional */
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  background-color: #16a34a;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(22, 163, 74, 0.5);
+  animation: blink 1.5s infinite ease-in-out;
+}
+
+/* Animación de parpadeo para el monitoreo en tiempo real */
+@keyframes blink {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Ajuste de responsividad para pantallas pequeñas */
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .full-width {
+    grid-column: span 1;
+  }
+}
+/* Estilo moderno para el botón de regresar */
+.btn-regresar {
+  background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco muy sutil */
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.6); /* Borde semi-transparente */
+  padding: 10px 20px;
+  border-radius: 8px; /* Bordes más redondeados y modernos */
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px); /* Efecto de desenfoque detrás del botón */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto al pasar el mouse (Hover) */
+.btn-regresar:hover {
+  background-color: #ffffff;
+  color: #1e3a8a; /* Azul oscuro que coincide con tu banner */
+  border-color: #ffffff;
+  transform: translateX(-5px); /* Pequeño movimiento hacia la izquierda */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajuste para el icono */
+.btn-regresar i {
+  font-size: 1rem;
+}

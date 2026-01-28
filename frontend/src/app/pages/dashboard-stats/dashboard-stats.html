@@ -1,0 +1,43 @@
+<div class="main-container">
+  <div class="header-banner">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <div>
+        <h1>{{ tituloPanel }}</h1>
+        <p>SISTEMA DE GESTIÓN DE SEGURIDAD OPERACIONAL - AERONACIONAL</p>
+      </div>
+<button (click)="regresar()" class="btn-regresar">
+  <i class="fas fa-arrow-left"></i> VOLVER AL DASHBOARD
+</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="card-chart full-width" *ngIf="chartOptions">
+      <apx-chart 
+        [series]="chartOptions.series" 
+        [chart]="chartOptions.chart" 
+        [xaxis]="chartOptions.xaxis"
+        [colors]="chartOptions.colors"
+        [plotOptions]="chartOptions.plotOptions"
+        [title]="chartOptions.title"
+        [dataLabels]="chartOptions.dataLabels">
+      </apx-chart>
+    </div>
+
+    <div class="card-chart">
+      <h3>Resumen Operativo</h3>
+      <div class="total-box" style="text-align: center; padding: 20px;">
+        <span style="display: block; font-size: 0.9rem; color: #64748b; margin-bottom: 5px;">Total de Reportes</span>
+        <span style="font-size: 3.5rem; font-weight: bold; color: #1e3a8a;">{{ totalGlobal }}</span>
+      </div>
+    </div>
+
+    <div class="card-chart">
+      <h3>Estado del Monitoreo</h3>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 30px;">
+        <span class="dot-online"></span>
+        <span style="color: #16a34a; font-weight: bold;">BACKEND DJANGO ACTIVO</span>
+      </div>
+    </div>
+  </div>
+</div>

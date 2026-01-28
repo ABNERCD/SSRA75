@@ -6,7 +6,7 @@ import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './authe/register/register';
 import { DashboardComponent } from './pages/dashboard/dashboard'; 
 import { authGuard } from './auth/auth.guard'; 
-
+import { DashboardStats } from './pages/dashboard-stats/dashboard-stats';
 // 1. IMPORTAR EL COMPONENTE DE REPORTE VOLUNTARIO
 import { VoluntaryReportComponent } from './pages/voluntary-report/voluntary-report'; 
 import { ReportePistaComponent } from './pages/reporte-pista/reporte-pista';
@@ -14,6 +14,7 @@ import { IncapacitacionTecnicoComponent } from './pages/incapacitacion-tecnico/i
 import { IncapacitacionOperadorComponent } from './pages/incapacitacion-operador/incapacitacion-operador';
 import { RpasDanosComponent } from './pages/rpas-danos/rpas-danos';
 import { RpasAvistamientoComponent } from './pages/rpas-avistamiento/rpas-avistamiento';
+
 // Asegúrate de que esta ruta de importación sea correcta (ajústala si es necesario).
 
 export const routes: Routes = [
@@ -90,11 +91,20 @@ export const routes: Routes = [
         component: RpasAvistamientoComponent,
         canActivate: [authGuard]
     },
+// RUTA ESTADISTICA
+{ 
+    path: 'dashboard-stats', 
+    component: DashboardStats,
+    canActivate: [authGuard] 
+},
 
     // RUTA COMODÍN
     { 
+
         path: '**', 
         redirectTo: 'login',
         pathMatch: 'full' 
     }
+
+    
 ];

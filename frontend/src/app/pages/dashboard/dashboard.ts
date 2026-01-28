@@ -84,4 +84,11 @@ export class DashboardComponent implements OnInit {
     localStorage.removeItem('refresh_token');
     this.router.navigate(['/login']); 
   }
+  // función estadistica
+goToStats(tipo: string): void {
+  this.cerrarMenu();
+  this.router.navigate(['/dashboard-stats'], {
+    queryParams: { filtro: tipo }
+  });
+}
 }
